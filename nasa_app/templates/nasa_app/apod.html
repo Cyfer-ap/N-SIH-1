@@ -1,0 +1,103 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/apod.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="apod-container">
+    {% if apod_data.error %}
+      <div class="error-message">
+        <i class="fas fa-exclamation-triangle"></i>
+        <p>Error loading APOD: {{ apod_data.message }}</p>
+      </div>
+    {% else %}
+      <h1 class="apod-title">{{ apod_data.title }}</h1>
+      <div class="meta-info">
+        <span class="date"><i class="fas fa-calendar-alt"></i> {{ apod_data.date }}</span>
+      </div>
+
+      <div class="media-wrapper">
+        {% if apod_data.media_type == "image" %}
+          <img src="{{ apod_data.url }}" alt="APOD Image" class="apod-media">
+        {% elif apod_data.media_type == "video" %}
+          <iframe class="apod-media" src="{{ apod_data.url }}"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen></iframe>
+        {% endif %}
+      </div>
+
+      <div class="explanation">
+        <h3>Explanation</h3>
+        <p>{{ apod_data.explanation }}</p>
+      </div>
+    {% endif %}
+
+    <div class="date-picker">
+      <form method="get" action="{% url 'apod' %}">
+        <label for="date"><i class="fas fa-calendar"></i> Select Date:</label>
+        <input type="date" name="date" id="date" value="{{ apod_data.date }}">
+        <button type="submit" class="btn">Get APOD</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('.date-picker form');
+  const dateInput = document.getElementById('date');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();  // stop page reload
+
+    const selectedDate = dateInput.value;
+    if (!selectedDate) return;
+
+    fetch(`{% url 'apod' %}?date=${selectedDate}`, {
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => updateAPOD(data))
+    .catch(err => console.error('Error fetching APOD:', err));
+  });
+
+  function updateAPOD(data) {
+    if (data.error) {
+      alert('Error loading APOD: ' + data.message);
+      return;
+    }
+
+    // Update title
+    document.querySelector('.apod-title').textContent = data.title;
+
+    // Update date
+    document.querySelector('.meta-info .date').textContent = '📅 ' + data.date;
+
+    // Update media
+    const mediaWrapper = document.querySelector('.media-wrapper');
+    mediaWrapper.innerHTML = '';  // clear old media
+
+    if (data.media_type === 'image') {
+      const img = document.createElement('img');
+      img.src = data.url;
+      img.alt = 'APOD Image';
+      img.className = 'apod-media';
+      mediaWrapper.appendChild(img);
+    } else if (data.media_type === 'video') {
+      const iframe = document.createElement('iframe');
+      iframe.src = data.url;
+      iframe.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.className = 'apod-media';
+      mediaWrapper.appendChild(iframe);
+    }
+
+    // Update explanation
+    const explanationDiv = document.querySelector('.explanation p');
+    explanationDiv.textContent = data.explanation;
+  }
+});
+</script>
+{% endblock %}

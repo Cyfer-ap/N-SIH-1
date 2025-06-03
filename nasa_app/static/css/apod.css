@@ -1,0 +1,136 @@
+/* Reset & base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #1b2735 0%, #090a0f 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #e0e6f0;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 40px;
+}
+
+/* Container */
+.apod-container {
+  background: rgba(30, 41, 59, 0.9);
+  padding: 30px 40px;
+  border-radius: 12px;
+  max-width: 800px;
+  width: 90%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+  text-align: center;
+}
+
+/* Title */
+.apod-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 0.2em;
+  color: #f0f4ff;
+  font-weight: 700;
+}
+
+/* Date */
+.apod-container p {
+  font-size: 1rem;
+  color: #a1b0d1;
+  margin: 0.5em 0 1.5em;
+  font-weight: 500;
+}
+
+/* Image & Video */
+.apod-container img,
+.apod-container iframe {
+  max-width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+  margin-bottom: 1.5em;
+  transition: transform 0.3s ease;
+}
+
+.apod-container img:hover {
+  transform: scale(1.02);
+}
+
+/* Explanation text */
+.apod-container p.explanation {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: #d1d9ff;
+  margin-bottom: 2em;
+  font-weight: 400;
+  text-align: justify;
+}
+
+/* Form styling */
+form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* Date input styling */
+input[type="date"] {
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: none;
+  background-color: #2e3a59;
+  color: #cbd5e1;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: inset 2px 2px 6px #1c2437, inset -2px -2px 6px #3b4b75;
+  transition: background-color 0.3s ease;
+}
+
+input[type="date"]:focus {
+  outline: none;
+  background-color: #3f517a;
+}
+
+/* Submit button */
+button[type="submit"] {
+  background-color: #3a86ff;
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  box-shadow: 0 5px 15px rgba(58, 134, 255, 0.5);
+}
+
+button[type="submit"]:hover {
+  background-color: #005ce6;
+  box-shadow: 0 7px 20px rgba(0, 92, 230, 0.8);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .apod-container {
+    padding: 20px;
+  }
+  
+  .apod-container h2 {
+    font-size: 2rem;
+  }
+
+  form {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  button[type="submit"], input[type="date"] {
+    width: 100%;
+  }
+}

@@ -1,0 +1,13 @@
+{% extends 'nasa_app/base.html' %}
+
+
+{% block title %}Home - NASA Explorer{% endblock %}
+
+{% block content %}
+  <h2>Welcome to NASA Explorer</h2>
+  <p>Start exploring data from NASA APIs!</p>
+  <ul>
+    <li><a href="{% url 'apod' %}">Astronomy Picture of the Day</a></li>
+    <!-- Add links to other features -->
+  </ul>
+{% endblock %}

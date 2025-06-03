@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}NASA Explorer{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+  {% block styles %}{% endblock %}
+</head>
+<body>
+  <header>
+    <h1><a href="{% url 'home' %}">NASA Explorer</a></h1>
+    <nav>
+      <a href="{% url 'apod' %}">APOD</a>
+      <!-- Add more feature links here -->
+    </nav>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    <p>&copy; 2025 NASA API Project</p>
+  </footer>
+
+  <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
