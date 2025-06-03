@@ -1,0 +1,36 @@
+{% extends 'nasa_app/base.html' %}
+
+{% block title %}Mars Rover Photos - NASA Explorer{% endblock %}
+
+{% block content %}
+  <div class="mars-container">
+    <h2>Mars Rover Photos</h2>
+
+    <form method="get">
+      <label for="date">Select Earth Date:</label>
+      <input type="date" name="date" id="date" value="{{ selected_date }}">
+      
+      <label for="rover">Rover:</label>
+      <select name="rover" id="rover">
+        <option value="curiosity" {% if rover == 'curiosity' %}selected{% endif %}>Curiosity</option>
+        <option value="opportunity" {% if rover == 'opportunity' %}selected{% endif %}>Opportunity</option>
+        <option value="spirit" {% if rover == 'spirit' %}selected{% endif %}>Spirit</option>
+      </select>
+
+      <button type="submit">View Photos</button>
+    </form>
+
+    {% if photos %}
+      <div class="photos-grid">
+        {% for photo in photos %}
+          <div class="photo-card">
+            <img src="{{ photo.img_src }}" alt="Mars Photo">
+            <p><strong>Camera:</strong> {{ photo.camera.full_name }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No photos available for this date and rover.</p>
+    {% endif %}
+  </div>
+{% endblock %}

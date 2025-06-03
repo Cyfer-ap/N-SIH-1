@@ -42,12 +42,34 @@
       </form>
     </div>
   </div>
+    <footer class="footer">
+      <p>&copy; {{ current_year }} NASA Explorer. All rights reserved.</p>
+    </footer>
+
 {% endblock %}
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.querySelector('.date-picker form');
   const dateInput = document.getElementById('date');
+
+  // Set default value: if before 12 PM, use yesterday
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const isBeforeNoon = now.getHours() < 12;
+
+  const defaultDate = isBeforeNoon
+    ? new Date(today.getTime() - 86400000) // yesterday
+    : today;
+
+  const formattedDate = defaultDate.toISOString().split('T')[0];
+  dateInput.value = formattedDate;
+
+  // Disable selecting today if before noon
+  if (isBeforeNoon) {
+    const todayStr = today.toISOString().split('T')[0];
+    dateInput.setAttribute('max', todayStr);
+  }
 
   form.addEventListener('submit', function(e) {
     e.preventDefault();  // stop page reload
@@ -69,15 +91,11 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
 
-    // Update title
     document.querySelector('.apod-title').textContent = data.title;
-
-    // Update date
     document.querySelector('.meta-info .date').textContent = '📅 ' + data.date;
 
-    // Update media
     const mediaWrapper = document.querySelector('.media-wrapper');
-    mediaWrapper.innerHTML = '';  // clear old media
+    mediaWrapper.innerHTML = '';
 
     if (data.media_type === 'image') {
       const img = document.createElement('img');
@@ -94,10 +112,9 @@ document.addEventListener('DOMContentLoaded', function() {
       mediaWrapper.appendChild(iframe);
     }
 
-    // Update explanation
-    const explanationDiv = document.querySelector('.explanation p');
-    explanationDiv.textContent = data.explanation;
+    document.querySelector('.explanation p').textContent = data.explanation;
   }
 });
 </script>
 {% endblock %}
+
