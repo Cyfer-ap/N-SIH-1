@@ -1,15 +1,20 @@
 {% extends 'nasa_app/base.html' %}
+{% load static %}
 
 {% block title %}Mars Rover Photos - NASA Explorer{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/mars.css' %}">
+{% endblock %}
 
 {% block content %}
   <div class="mars-container">
     <h2>Mars Rover Photos</h2>
 
-    <form method="get">
+    <form id="filter-form" method="get">
       <label for="date">Select Earth Date:</label>
       <input type="date" name="date" id="date" value="{{ selected_date }}">
-      
+
       <label for="rover">Rover:</label>
       <select name="rover" id="rover">
         <option value="curiosity" {% if rover == 'curiosity' %}selected{% endif %}>Curiosity</option>
@@ -19,18 +24,40 @@
 
       <button type="submit">View Photos</button>
     </form>
+      <span class="note-icon" id="date-range-tooltip" tabindex="0" aria-label="Date ranges info" role="tooltip">
+        &#9432;
+        <span class="tooltip-text" id="tooltip-text">
+          Curiosity: 2012-08-06 to today<br>
+          Opportunity: 2004-01-25 to 2018-06-10<br>
+          Spirit: 2004-01-04 to 2010-03-22
+        </span>
+      </span>
 
-    {% if photos %}
-      <div class="photos-grid">
+    <div id="photos-grid" class="photos-grid">
+      {% if photos %}
         {% for photo in photos %}
           <div class="photo-card">
-            <img src="{{ photo.img_src }}" alt="Mars Photo">
+            <img src="{{ photo.img_src }}" alt="Mars Photo" data-photo-id="{{ photo.id }}">
             <p><strong>Camera:</strong> {{ photo.camera.full_name }}</p>
           </div>
         {% endfor %}
-      </div>
-    {% else %}
-      <p>No photos available for this date and rover.</p>
-    {% endif %}
+      {% else %}
+        <p id="no-photos-msg">No photos available for this date and rover.</p>
+      {% endif %}
+    </div>
+
+    <button id="load-more-btn" style="display: none;">Load More</button>
+  </div>
+
+  <!-- Modal for enlarged photo -->
+  <div id="photo-modal" class="modal" style="display:none;">
+    <span id="modal-close" class="modal-close">&times;</span>
+    <img class="modal-content" id="modal-img" alt="Large Mars Photo">
+    <div id="modal-caption"></div>
   </div>
 {% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/mars.js' %}"></script>
+{% endblock %}
+
