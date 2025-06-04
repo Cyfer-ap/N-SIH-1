@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.shortcuts import render
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta, date, timezone
 
 from nasa_project.settings import NASA_API_KEY
 
@@ -206,3 +206,52 @@ def earth_view(request):
     }
 
     return render(request, 'nasa_app/earth.html', context)
+
+
+@require_GET
+def space_weather_view(request):
+    start_date = request.GET.get('start')
+    end_date = request.GET.get('end')
+
+    if not start_date or not end_date:
+        today = datetime.now(timezone.utc).date()
+        seven_days_ago = today - timedelta(days=7)
+        start_date = seven_days_ago.isoformat()
+        end_date = today.isoformat()
+
+    # If this is an AJAX fetch, call NASA API and return JSON data
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        base_url = 'https://api.nasa.gov/DONKI'
+        endpoints = {
+            'solar_flares': '/FLR',
+            'cmes': '/CME',
+            'geomagnetic_storms': '/GSM',
+            'seps': '/SEP',
+            'ips': '/IPS',
+        }
+
+        results = {}
+
+        for key, endpoint in endpoints.items():
+            params = {
+                'startDate': start_date,
+                'endDate': end_date,
+                'api_key': NASA_API_KEY
+            }
+            try:
+                res = requests.get(f"{base_url}{endpoint}", params=params)
+                res.raise_for_status()
+                results[key] = res.json()
+            except Exception as e:
+                results[key] = {'error': str(e)}
+
+        return JsonResponse(results)
+
+    # Otherwise, just render the page without calling NASA API
+    return render(request, 'nasa_app/space_weather.html', {
+        'start_date': start_date,
+        'end_date': end_date,
+    })
+
+
+

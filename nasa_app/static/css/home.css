@@ -1,0 +1,75 @@
+/* General Page Styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0b0c10;
+  color: #ffffff;
+  margin: 0;
+  padding: 2rem;
+}
+
+/* Header */
+h2 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #66fcf1;
+}
+
+/* Paragraph */
+p {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: #c5c6c7;
+}
+
+/* Dropdown Label and Selector */
+label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+select {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #1f2833;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  background-color: #45a29e;
+  color: #0b0c10;
+}
+
+/* Link List Styling */
+ul.category-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul.category-links li {
+  margin-bottom: 0.75rem;
+}
+
+ul.category-links a {
+  text-decoration: none;
+  font-size: 1.05rem;
+  color: #66fcf1;
+  background-color: #1f2833;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+ul.category-links a:hover {
+  background-color: #45a29e;
+  color: #0b0c10;
+}

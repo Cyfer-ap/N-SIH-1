@@ -1,0 +1,63 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}NASA Space Weather Tracker{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/space_weather.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="space-weather-container">
+  <h2>NASA Space Weather Tracker</h2>
+
+  <!-- Updated Form with New Filters -->
+  <form id="space-weather-form" class="space-weather-form">
+    <label>Start Date: <input type="date" id="start-date" name="start_date" value="{{ start_date }}"></label>
+    <label>End Date: <input type="date" id="end-date" name="end_date" value="{{ end_date }}"></label>
+
+    <!-- New filters -->
+    <label for="flare-class-filter">Solar Flare Class:</label>
+    <select id="flare-class-filter" name="flare_class">
+      <option value="">All</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+      <option value="M">M</option>
+      <option value="X">X</option>
+    </select>
+
+    <label for="kp-index-filter">Min KP Index (Storms):</label>
+    <select id="kp-index-filter" name="kp_index">
+      <option value="">Any</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+    </select>
+
+    <button type="submit" class="btn-fetch">Fetch Events</button>
+  </form>
+
+  <!-- Container for charts -->
+  <div class="charts-container">
+    <canvas id="solarFlareChart" width="600" height="300"></canvas>
+    <canvas id="kpIndexChart" width="600" height="300"></canvas>
+  </div>
+
+  <!-- Results Section -->
+  <div id="space-weather-results" class="results-container">
+    <p>Loading latest space weather events...</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <script src="{% static 'js/space_weather.js' %}"></script>
+
+{% endblock %}

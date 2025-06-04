@@ -9,6 +9,7 @@ urlpatterns = [
     path('library/', views.image_video_library_view, name='library'),
     # path('earth/', earth_view, name='earth'),
     path('earth/', views.earth_view, name='earth_view'),
+    path('space-weather/', views.space_weather_view, name='space_weather_view'),
 
 ]
 from django.conf import settings
