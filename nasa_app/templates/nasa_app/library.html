@@ -1,0 +1,54 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}NASA Image & Video Library Search{% endblock %}
+
+{% block styles %}
+  <link rel="stylesheet" href="{% static 'css/library.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="library-container">
+  <h2>NASA Image & Video Library</h2>
+
+  <form method="get" id="search-form" class="search-form">
+    <input
+      type="text"
+      name="q"
+      id="search-input"
+      placeholder="Search for planets, missions, spacecrafts..."
+      value="{{ query }}"
+      autocomplete="off"
+      required
+    />
+    <button type="submit" id="search-btn">🔍</button>
+  </form>
+
+  <div id="suggestion-box" class="suggestion-box" {% if query %}style="display:none"{% endif %}>
+    <p>Try searching for:</p>
+    <div class="suggestion-list">
+      <a href="#" data-query="neptune">Neptune</a>
+      <a href="#" data-query="apollo">Apollo</a>
+      <a href="#" data-query="moon landing">Moon Landing</a>
+      <a href="#" data-query="earth">Earth</a>
+      <a href="#" data-query="perseverance">Perseverance</a>
+      <a href="#" data-query="hubble">Hubble</a>
+    </div>
+  </div>
+
+  <div id="library-grid" class="results-grid"></div>
+
+  <button id="load-more-btn" style="display:none;">Load More</button>
+
+  <!-- Modal for media details -->
+  <div id="media-modal" class="modal" style="display:none;">
+    <div class="modal-content" id="modal-content"></div>
+    <span class="modal-close" id="modal-close">&times;</span>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'js/library.js' %}"></script>
+{% endblock %}
