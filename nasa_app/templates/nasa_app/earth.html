@@ -1,0 +1,44 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}NASA Earth Satellite Imagery{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/earth.css' %}">
+{% endblock %}
+
+{% block content %}
+  <div class="earth-container">
+    <h2>NASA Earth Satellite Imagery</h2>
+    <form id="earth-form" method="get" novalidate>
+      <label>
+        Latitude:
+        <input type="number" step="any" name="lat" id="lat-input" value="{{ lat|default:'' }}" required min="-90" max="90" placeholder="e.g. 40.7128">
+      </label>
+      <label>
+        Longitude:
+        <input type="number" step="any" name="lon" id="lon-input" value="{{ lon|default:'' }}" required min="-180" max="180" placeholder="e.g. -74.0060">
+      </label>
+      <label>
+        Date (optional):
+        <input type="date" name="date" id="date-input" value="{{ date|default:'' }}" max="{{ today|default:'' }}">
+      </label>
+      <button type="submit">Get Image</button>
+    </form>
+
+    {% if error_msg %}
+      <p class="error">{{ error_msg }}</p>
+    {% endif %}
+
+    {% if image_url %}
+      <div class="image-wrapper">
+        <h3>Image for {{ lat }}, {{ lon }}{% if date %} on {{ date }}{% endif %}</h3>
+        <img src="{{ image_url }}" alt="Satellite Image">
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/earth.js' %}"></script>
+{% endblock %}

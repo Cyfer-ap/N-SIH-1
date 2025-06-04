@@ -104,3 +104,105 @@ def mars_rover_view(request):
     return render(request, 'nasa_app/mars.html', context)
 
 
+def image_video_library_view(request):
+    query = request.GET.get('q', '').strip()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        page = request.GET.get('page', '1')
+        url = 'https://images-api.nasa.gov/search'
+        params = {
+            'q': query,
+            'media_type': 'image,video',
+            'page': page,
+        }
+
+        res = requests.get(url, params=params)
+        data = res.json()
+
+        items = []
+        for item in data.get('collection', {}).get('items', []):
+            data_block = item.get('data', [{}])[0]
+            links = item.get('links', [])
+            thumb_url = next((l['href'] for l in links if l.get('rel') == 'preview'), '')
+
+            video_url = None
+            if data_block.get('media_type') == 'video':
+                # Find manifest JSON url from links or elsewhere
+                manifest_url = next((l['href'] for l in links if l['href'].endswith('manifest.json')), None)
+                if manifest_url:
+                    video_url = get_video_mp4_url(manifest_url)
+
+            items.append({
+                'title': data_block.get('title', 'No Title'),
+                'description': data_block.get('description', 'No description'),
+                'media_type': data_block.get('media_type', 'unknown'),
+                'nasa_id': data_block.get('nasa_id', ''),
+                'thumb_url': thumb_url,
+                'date_created': data_block.get('date_created', ''),
+                'video_url': video_url,
+            })
+
+        return JsonResponse({'items': items})
+
+    context = {
+        'query': query,
+        'items': [],
+    }
+    return render(request, 'nasa_app/library.html', context)
+
+
+
+def get_video_mp4_url(manifest_url):
+    try:
+        r = requests.get(manifest_url)
+        r.raise_for_status()
+        manifest_data = r.json()
+
+        # Look for mp4 files in manifest - example path in manifest JSON:
+        # manifest_data['items'] list with 'href' keys ending with .mp4
+        for item in manifest_data.get('items', []):
+            href = item.get('href', '')
+            if href.endswith('.mp4'):
+                return href
+    except Exception:
+        pass
+    return None
+
+
+@require_GET
+def earth_view(request):
+    lat = request.GET.get('lat')
+    lon = request.GET.get('lon')
+    date = request.GET.get('date')  # Optional
+
+    if not lat or not lon:
+        # Just render the input page if no coordinates
+        return render(request, 'nasa_app/earth.html')
+
+    params = {
+        'lat': lat,
+        'lon': lon,
+        'api_key': NASA_API_KEY,
+    }
+    if date:
+        params['date'] = date
+
+    try:
+        res = requests.get('https://api.nasa.gov/planetary/earth/assets', params=params)
+        res.raise_for_status()
+        data = res.json()
+        image_url = data.get('url')
+    except Exception as e:
+        image_url = None
+        error_msg = str(e)
+    else:
+        error_msg = None
+
+    context = {
+        'image_url': image_url,
+        'lat': lat,
+        'lon': lon,
+        'date': date,
+        'error_msg': error_msg,
+    }
+
+    return render(request, 'nasa_app/earth.html', context)
