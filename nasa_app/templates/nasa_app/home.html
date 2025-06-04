@@ -1,16 +1,49 @@
 {% extends 'nasa_app/base.html' %}
+{% load static %}
 
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
 
 {% block title %}Home - NASA Explorer{% endblock %}
 
 {% block content %}
   <h2>Welcome to NASA Explorer</h2>
   <p>Start exploring data from NASA APIs!</p>
-  <ul>
+
+  <label for="categorySelect"><strong>Select Category:</strong></label>
+  <select id="categorySelect" onchange="showCategoryLinks()">
+    <option value="space">Space</option>
+    <option value="land">Land</option>
+    <option value="ocean">Ocean</option>
+  </select>
+
+  <ul id="spaceLinks" class="category-links">
     <li><a href="{% url 'apod' %}">Astronomy Picture of the Day</a></li>
-      <li><a href="{% url 'mars_rover' %}">Mars Rover Photos</a></li>
-      <li><a href="{% url 'library' %}">Images and Video Search</a></li>
-      <li><a href="{% url 'earth_view' %}">NASA Earth Satellite Imagery</a></li>
-    <!-- Add links to other features -->
+    <li><a href="{% url 'mars_rover' %}">Mars Rover Photos</a></li>
+    <li><a href="{% url 'library' %}">Images and Video Search</a></li>
+    <li><a href="{% url 'earth_view' %}">NASA Earth Satellite Imagery</a></li>
+    <li><a href="{% url 'space_weather_view' %}">Space Weather Tracker</a></li>
+
   </ul>
+
+  <ul id="landLinks" class="category-links" style="display: none;">
+    <li><a href="#">Land Observation Tool</a></li>
+    <li><a href="#">Deforestation Tracker</a></li>
+    <li><a href="#">Land Cover Explorer</a></li>
+  </ul>
+
+  <ul id="oceanLinks" class="category-links" style="display: none;">
+    <li><a href="#">Ocean Temperature Monitor</a></li>
+    <li><a href="#">Marine Life Visualizer</a></li>
+    <li><a href="#">Sea Level Data Viewer</a></li>
+  </ul>
+
+  <script>
+    function showCategoryLinks() {
+      const selected = document.getElementById('categorySelect').value;
+      document.querySelectorAll('.category-links').forEach(list => list.style.display = 'none');
+      document.getElementById(selected + 'Links').style.display = 'block';
+    }
+  </script>
 {% endblock %}
