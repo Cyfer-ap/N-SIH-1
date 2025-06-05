@@ -12,6 +12,7 @@ urlpatterns = [
     path("iss-tracker/", views.iss_tracker, name="iss_tracker"),
     path("api/iss-passes/", views.get_iss_passes, name="get_iss_passes"),
     path("api/satellite-position/", views.get_satellite_position, name="satellite_position"),
+    path("api/satellite-path/", views.get_satellite_path, name="satellite-path"),
 
 
 ]
