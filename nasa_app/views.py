@@ -303,7 +303,6 @@ def get_iss_passes(request):
         return JsonResponse({"error": str(e)}, status=500)
 
 
-
 def get_satellite_position(request):
     try:
         satid = request.GET.get("satid")
@@ -325,4 +324,21 @@ def multi_sat_tracker_view(request):
         'initial_lon': 77.2090,
         'n2yo_api_key': settings.N2YO_API_KEY
     })
+
+
+def get_satellite_path(request):
+    try:
+        satid = request.GET.get("satid")
+        lat = request.GET.get("lat")
+        lon = request.GET.get("lon")
+        alt = request.GET.get("alt", 0)
+        secs = request.GET.get("secs", 5400)
+
+        url = f"https://api.n2yo.com/rest/v1/satellite/positions/{satid}/{lat}/{lon}/{alt}/{secs}/&apiKey={settings.N2YO_API_KEY}"
+        response = requests.get(url)
+        response.raise_for_status()
+        return JsonResponse(response.json())
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
 

@@ -13,41 +13,45 @@
   <h2>🛰️ Real-Time Satellite Tracker</h2>
 
   <select id="satellite-select">
-  <optgroup label="🛰️ Space Stations">
-    <option value="25544">ISS (25544)</option>
-    <option value="41765">Tiangong Space Station (41765)</option>
-  </optgroup>
+    <optgroup label="🛰️ Space Stations">
+      <option value="25544">ISS (25544)</option>
+      <option value="41765">Tiangong Space Station (41765)</option>
+    </optgroup>
+    <optgroup label="🌍 Earth Observation">
+      <option value="25994">Terra (25994)</option>
+      <option value="39084">Landsat 8 (39084)</option>
+      <option value="33591">OCEANSAT-2 (33591)</option>
+      <option value="40926">RESOURCESAT-2A (40926)</option>
+      <option value="39086">SARAL (39086)</option>
+      <option value="43013">NOAA 20 (43013)</option>
+      <option value="25338">SPOT 4 (25338)</option>
+    </optgroup>
+    <optgroup label="🛰️ Scientific & Space Telescopes">
+      <option value="20580">Hubble Space Telescope (20580)</option>
+      <option value="36122">SWIFT Gamma-Ray Burst Explorer (36122)</option>
+      <option value="27370">CHANDRA X-Ray Observatory (27370)</option>
+    </optgroup>
+    <optgroup label="☁️ Meteorological">
+      <option value="40938">INSAT-3DR (40938)</option>
+      <option value="42930">MetOp-C (42930)</option>
+      <option value="27424">FENGYUN 1C (27424)</option>
+    </optgroup>
+    <optgroup label="📡 Communication & Navigation">
+      <option value="40935">GSAT-18 (40935)</option>
+      <option value="43226">GSAT-31 (43226)</option>
+      <option value="43241">GSAT-30 (43241)</option>
+      <option value="41866">IRNSS-1I (41866)</option>
+    </optgroup>
+  </select>
 
-  <optgroup label="🌍 Earth Observation">
-    <option value="25994">Terra (25994)</option>
-    <option value="39084">Landsat 8 (39084)</option>
-    <option value="33591">OCEANSAT-2 (33591)</option>
-    <option value="40926">RESOURCESAT-2A (40926)</option>
-    <option value="39086">SARAL (39086)</option>
-    <option value="43013">NOAA 20 (43013)</option>
-    <option value="25338">SPOT 4 (25338)</option>
-  </optgroup>
-
-  <optgroup label="🛰️ Scientific & Space Telescopes">
-    <option value="20580">Hubble Space Telescope (20580)</option>
-    <option value="36122">SWIFT Gamma-Ray Burst Explorer (36122)</option>
-    <option value="27370">CHANDRA X-Ray Observatory (27370)</option>
-  </optgroup>
-
-  <optgroup label="☁️ Meteorological">
-    <option value="40938">INSAT-3DR (40938)</option>
-    <option value="42930">MetOp-C (42930)</option>
-    <option value="27424">FENGYUN 1C (27424)</option>
-  </optgroup>
-
-  <optgroup label="📡 Communication & Navigation">
-    <option value="40935">GSAT-18 (40935)</option>
-    <option value="43226">GSAT-31 (43226)</option>
-    <option value="43241">GSAT-30 (43241)</option>
-    <option value="41866">IRNSS-1I (41866)</option>
-  </optgroup>
-</select>
-
+  <div class="orbit-toggle">
+    <label class="switch">
+      <input type="checkbox" id="toggle-future-path" checked>
+      <span class="slider round"></span>
+    </label>
+    <span>Show Future Path (Green Line)</span>
+  </div>
+  <p id="future-path-note" class="path-note">✅ Green line represents the future orbit path of the satellite (for 90 minutes).</p>
 
   <div id="map" class="map-container"></div>
 
@@ -58,19 +62,41 @@
   </div>
 </div>
 
+<!-- ✅ ISS Live Stream Section -->
+<div class="live-feed-toggle" id="live-feed-toggle" style="display: none;">
+  <label class="switch">
+    <input type="checkbox" id="live-feed-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <span>Show ISS Live Feed</span>
+</div>
+
+<div id="live-feed-section" class="live-feed-section" style="display: none;">
+  <h3>📺 ISS Live Stream</h3>
+  <p class="stream-note">Live video from cameras aboard the International Space Station</p>
+  <div class="video-wrapper">
+    <iframe
+    width="100%"
+    height="400"
+    src="https://www.youtube.com/embed/H999s0P1Er0?autoplay=1&mute=1"
+    title="ISS Live Feed"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+  </div>
+</div>
+
 <div class="pass-section">
   <h3>🔭 Find Next Satellite Pass Over Your Location</h3>
   <form id="pass-form">
-    <label>
-      City / Place:
+    <label>City / Place:
       <input type="text" id="place-input" placeholder="e.g. Delhi">
     </label>
-    <label>
-      Latitude:
+    <label>Latitude:
       <input type="number" step="any" id="pass-lat" placeholder="e.g. 28.6139" required>
     </label>
-    <label>
-      Longitude:
+    <label>Longitude:
       <input type="number" step="any" id="pass-lon" placeholder="e.g. 77.2090" required>
     </label>
     <button type="button" id="locate-me">📍 Use My Location</button>
@@ -91,4 +117,6 @@
   const N2YO_API_KEY = "{{ n2yo_api_key }}";
 </script>
 <script src="{% static 'js/iss_tracker.js' %}"></script>
+
+
 {% endblock %}
