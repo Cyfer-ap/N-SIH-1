@@ -1,0 +1,48 @@
+.satellite-above-container {
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input, select {
+  padding: 5px;
+  margin-left: 10px;
+  margin-top: 5px;
+}
+
+button {
+  padding: 8px 16px;
+  margin-top: 15px;
+}
+
+.map-container {
+  width: 100%;
+  height: 400px;
+  margin: 15px 0;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #444;
+}
+
+.satellite-list {
+  margin-top: 20px;
+  padding-left: 0;
+  list-style: none;
+}
+
+.satellite-list li {
+  background-color: #1f2937;
+  color: #e5e7eb;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+}

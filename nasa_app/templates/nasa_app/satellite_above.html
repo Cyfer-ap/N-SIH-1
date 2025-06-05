@@ -1,0 +1,59 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Satellite Pass Predictions{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/satellite_above.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+{% endblock %}
+
+{% block content %}
+<div class="satellite-above-container">
+  <h2>Upcoming Passes Over Your Location</h2>
+
+  <div id="map" class="map-container"></div>
+  <p class="map-instruction">📍 Click on the map to auto-fill coordinates</p>
+
+  <form method="get" id="above-form">
+    <label>Latitude:
+      <input type="number" step="any" name="lat" id="lat-input" value="{{ request.GET.lat }}" required>
+    </label>
+    <label>Longitude:
+      <input type="number" step="any" name="lon" id="lon-input" value="{{ request.GET.lon }}" required>
+    </label>
+    <label>Select Satellite:
+      <select name="satid" id="satid-select">
+        {% for id, name in satellites.items %}
+          <option value="{{ id }}" {% if request.GET.satid == id|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Find Passes</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if passes %}
+    <h3>Upcoming Passes for {{ selected_satname }}</h3>
+    <ul class="satellite-list">
+      {% for p in passes %}
+        <li>
+          <strong>Start Time:</strong> {{ p.startUTC|date:"Y-m-d H:i:s" }} UTC<br>
+          <strong>End Time:</strong> {{ p.endUTC|date:"Y-m-d H:i:s" }} UTC<br>
+          <strong>Duration:</strong> {{ p.duration }} seconds<br>
+          <strong>Max Elevation:</strong> {{ p.maxEl }}°<br>
+          <strong>Visible:</strong> {{ p.mag|default:"N/A" }}<br>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="{% static 'js/satellite_above.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Satellite Info Fetcher{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/satellite_info.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="satellite-info-container">
+  <h2>🔍 Satellite Info Fetcher</h2>
+
+  <form method="get" id="info-form">
+    <label>Select Satellite:
+      <select name="satid" id="satid-select" required>
+        {% for id, name in satellites.items %}
+          <option value="{{ id }}" {% if request.GET.satid == id|stringformat:"s" %}selected{% endif %}>{{ name }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <button type="submit">Get Info</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if info %}
+    <h3>📡 Satellite Details for <span style="color:#56e">{{ info.satname }}</span></h3>
+    <table class="info-table">
+      <tr><th colspan="2">📘 Basic Details</th></tr>
+      <tr><td><strong>Satellite Name</strong></td><td>{{ info.satname }}</td></tr>
+      <tr><td><strong>NORAD ID</strong></td><td>{{ info.satid }}</td></tr>
+      <tr><td><strong>Transactions Used</strong></td><td>{{ info.transactionscount }}</td></tr>
+    </table>
+
+    <br>
+
+    {% if tle_data %}
+      <h4>📄 TLE (Two-Line Element) Breakdown</h4>
+      <table class="info-table">
+        {% for key, value in tle_data.items %}
+          <tr>
+            <td><strong>{{ key }}</strong></td>
+            <td>{{ value }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+      <br>
+      <details>
+        <summary>🔎 Raw TLE (Click to expand)</summary>
+        <pre>{{ tle_raw }}</pre>
+      </details>
+    {% endif %}
+
+
+    <p><em>ℹ️ Additional orbital parameters like inclination, eccentricity, etc., are not provided by this endpoint. Use SGP4 library if needed for local calculations.</em></p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/satellite_info.js' %}"></script>
+{% endblock %}
