@@ -19,7 +19,9 @@ NASA_API_KEY = os.environ.get("NASA_API_KEY")
 if not NASA_API_KEY:
     raise RuntimeError("NASA_API_KEY not set in .env or environment")
 
-
+N2YO_API_KEY = os.environ.get("N2YO_API_KEY")
+if not N2YO_API_KEY:
+    raise RuntimeError("N2YO_API_KEY not set in .env or environment")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

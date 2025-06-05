@@ -4,9 +4,10 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from django.shortcuts import render
 from datetime import datetime, timedelta, date, timezone
-
 from nasa_project.settings import NASA_API_KEY
+import logging
 
+logger = logging.getLogger(__name__)
 PHOTOS_PER_PAGE = 21
 
 @require_GET
@@ -254,4 +255,74 @@ def space_weather_view(request):
     })
 
 
+def iss_tracker(request):
+    try:
+        res = requests.get("http://api.open-notify.org/iss-now.json").json()
+        position = res["iss_position"]
+        lat = float(position["latitude"])
+        lon = float(position["longitude"])
+        return render(request, "nasa_app/iss_tracker.html", {
+            "lat": lat,
+            "lon": lon
+        })
+    except Exception as e:
+        return render(request, "nasa_app/iss_tracker.html", {
+            "error_msg": "Could not fetch ISS data. Please try again later."
+        })
+
+
+def get_iss_passes(request):
+    lat = request.GET.get("lat")
+    lon = request.GET.get("lon")
+    satid = request.GET.get("satid", "25544")  # Default to ISS
+
+    if not lat or not lon:
+        return JsonResponse({"error": "Missing lat/lon"}, status=400)
+
+    try:
+        lat = float(lat)
+        lon = float(lon)
+        satid = int(satid)
+
+        api_key = settings.N2YO_API_KEY
+        alt = 0
+        days = 5
+        min_elevation = 0
+
+        url = (
+            f"https://api.n2yo.com/rest/v1/satellite/radiopasses/"
+            f"{satid}/{lat}/{lon}/{alt}/{days}/{min_elevation}/&apiKey={api_key}"
+        )
+
+        res = requests.get(url)
+        res.raise_for_status()
+        data = res.json()
+        return JsonResponse(data)
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+
+def get_satellite_position(request):
+    try:
+        satid = request.GET.get("satid")
+        lat = request.GET.get("lat")
+        lon = request.GET.get("lon")
+        alt = request.GET.get("alt", 0)
+
+        url = f"https://api.n2yo.com/rest/v1/satellite/positions/{satid}/{lat}/{lon}/{alt}/1/&apiKey={settings.N2YO_API_KEY}"
+        response = requests.get(url)
+        response.raise_for_status()
+        return JsonResponse(response.json())
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)
+
+
+def multi_sat_tracker_view(request):
+    return render(request, 'nasa_app/iss_tracker.html', {
+        'initial_lat': 28.6139,
+        'initial_lon': 77.2090,
+        'n2yo_api_key': settings.N2YO_API_KEY
+    })
 

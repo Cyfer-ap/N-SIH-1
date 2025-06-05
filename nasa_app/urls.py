@@ -1,6 +1,5 @@
 from django.urls import path
 from . import views
-from .views import earth_view
 
 urlpatterns = [
     path('', views.home, name='home'),  # APOD homepage
@@ -10,6 +9,10 @@ urlpatterns = [
     # path('earth/', earth_view, name='earth'),
     path('earth/', views.earth_view, name='earth_view'),
     path('space-weather/', views.space_weather_view, name='space_weather_view'),
+    path("iss-tracker/", views.iss_tracker, name="iss_tracker"),
+    path("api/iss-passes/", views.get_iss_passes, name="get_iss_passes"),
+    path("api/satellite-position/", views.get_satellite_position, name="satellite_position"),
+
 
 ]
 from django.conf import settings
