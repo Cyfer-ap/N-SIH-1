@@ -1,0 +1,156 @@
+.epic-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  background: linear-gradient(145deg, #0e1724, #1a2638);
+  border-radius: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  font-family: 'Inter', sans-serif;
+  color: #E0F7FA;
+}
+
+.epic-container h2 {
+  text-align: center;
+  color: #00C2FF;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+#epic-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+#epic-form label {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #E0F7FA;
+}
+
+#epic-form input[type="date"] {
+  padding: 10px 14px;
+  border: 2px solid #0B3D91;
+  border-radius: 8px;
+  background: #121F35;
+  color: #E0F7FA;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+#epic-form input[type="date"]:focus {
+  border-color: #00C2FF;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.3);
+}
+
+#epic-form button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #0B3D91, #062A68);
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  color: #E0F7FA;
+  box-shadow: 0 4px 12px rgba(11, 61, 145, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#epic-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(11, 61, 145, 0.4);
+}
+
+.error {
+  color: #ff6b6b;
+  background: #2e0f0f;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+.epic-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 30px;
+}
+
+.epic-card {
+  background: #1A2A4A;
+  padding: 16px;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.epic-card:hover {
+  transform: translateY(-5px);
+}
+
+.epic-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  object-fit: cover;
+}
+
+.epic-card p {
+  font-size: 0.95rem;
+  margin: 4px 0;
+  color: #CFE8F9;
+  text-align: center;
+}
+
+.download-button {
+  margin-top: 10px;
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #198754;
+  color: #E0F7FA;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(25, 135, 84, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.download-button:hover {
+  background: #146c43;
+  box-shadow: 0 5px 15px rgba(25, 135, 84, 0.5);
+  transform: translateY(-1px);
+}
+
+.pagination-controls {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.pagination-controls button {
+  padding: 10px 20px;
+  margin: 0 8px;
+  border-radius: 6px;
+  background: #0B3D91;
+  color: #E0F7FA;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination-controls button:hover {
+  background: #00C2FF;
+  color: #0B3D91;
+}

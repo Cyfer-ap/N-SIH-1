@@ -12,37 +12,77 @@
 <div class="iss-container">
   <h2>🛰️ Real-Time Satellite Tracker</h2>
 
-  <select id="satellite-select">
-    <optgroup label="🛰️ Space Stations">
-      <option value="25544">ISS (25544)</option>
-      <option value="41765">Tiangong Space Station (41765)</option>
-    </optgroup>
-    <optgroup label="🌍 Earth Observation">
-      <option value="25994">Terra (25994)</option>
-      <option value="39084">Landsat 8 (39084)</option>
-      <option value="33591">OCEANSAT-2 (33591)</option>
-      <option value="40926">RESOURCESAT-2A (40926)</option>
-      <option value="39086">SARAL (39086)</option>
-      <option value="43013">NOAA 20 (43013)</option>
-      <option value="25338">SPOT 4 (25338)</option>
-    </optgroup>
-    <optgroup label="🛰️ Scientific & Space Telescopes">
-      <option value="20580">Hubble Space Telescope (20580)</option>
-      <option value="36122">SWIFT Gamma-Ray Burst Explorer (36122)</option>
-      <option value="27370">CHANDRA X-Ray Observatory (27370)</option>
-    </optgroup>
-    <optgroup label="☁️ Meteorological">
-      <option value="40938">INSAT-3DR (40938)</option>
-      <option value="42930">MetOp-C (42930)</option>
-      <option value="27424">FENGYUN 1C (27424)</option>
-    </optgroup>
-    <optgroup label="📡 Communication & Navigation">
-      <option value="40935">GSAT-18 (40935)</option>
-      <option value="43226">GSAT-31 (43226)</option>
-      <option value="43241">GSAT-30 (43241)</option>
-      <option value="41866">IRNSS-1I (41866)</option>
-    </optgroup>
-  </select>
+  <select name="satid" id="satellite-select" required>
+      <optgroup label="🛰️ Space Stations">
+        <option value="25544">ISS (ZARYA) (25544)</option>
+        <option value="41765">Tiangong Space Station (41765)</option>
+      </optgroup>
+
+      <optgroup label="🌍 Earth Observation">
+        <option value="25994">Terra (25994)</option>
+        <option value="39084">Landsat 8 (39084)</option>
+        <option value="39085">Landsat 7 (39085)</option>
+        <option value="43013">NOAA 20 (43013)</option>
+        <option value="33591">OCEANSAT-2 (33591)</option>
+        <option value="40926">RESOURCESAT-2A (40926)</option>
+        <option value="39086">SARAL (39086)</option>
+        <option value="44387">METOP-C (44387)</option>
+        <option value="29499">METOP-A (29499)</option>
+        <option value="37849">SUOMI NPP (37849)</option>
+        <option value="41335">Sentinel-2A (41335)</option>
+        <option value="42063">Sentinel-2B (42063)</option>
+        <option value="39634">Sentinel-1B (39634)</option>
+        <option value="39422">Sentinel-1A (39422)</option>
+        <option value="43015">Sentinel-5P (43015)</option>
+      </optgroup>
+
+      <optgroup label="🔭 Scientific / Telescopes">
+        <option value="20580">Hubble Space Telescope (20580)</option>
+        <option value="36122">SWIFT Gamma-Ray Burst Explorer (36122)</option>
+        <option value="27370">CHANDRA X-Ray Observatory (27370)</option>
+        <option value="43743">TESS (43743)</option>
+        <option value="40379">GPM Core Observatory (40379)</option>
+        <option value="42073">CHEOPS (42073)</option>
+        <option value="47438">IXPE (47438)</option>
+        <option value="39017">Astrosat (39017)</option>
+      </optgroup>
+
+      <optgroup label="☁️ Meteorological">
+        <option value="27424">FENGYUN 1C (27424)</option>
+        <option value="40938">INSAT-3DR (40938)</option>
+        <option value="28654">AQUA (28654)</option>
+        <option value="27425">NOAA 18 (27425)</option>
+        <option value="27453">NOAA 15 (27453)</option>
+        <option value="27426">NOAA 17 (27426)</option>
+        <option value="27427">NOAA 16 (27427)</option>
+        <option value="33492">DMSP F17 (33492)</option>
+        <option value="33509">DMSP F18 (33509)</option>
+      </optgroup>
+
+      <optgroup label="📡 Communication & Navigation">
+        <option value="40935">GSAT-18 (40935)</option>
+        <option value="43226">GSAT-31 (43226)</option>
+        <option value="43241">GSAT-30 (43241)</option>
+        <option value="41866">IRNSS-1I (41866)</option>
+        <option value="44713">IRNSS-1G (44713)</option>
+        <option value="28628">INMARSAT 4-F3 (28628)</option>
+        <option value="29400">GALILEO 5 (29400)</option>
+        <option value="43037">GALILEO 23 (43037)</option>
+        <option value="28472">GLONASS-K1 (28472)</option>
+        <option value="27617">NAVSTAR 60 (27617)</option>
+      </optgroup>
+
+      <optgroup label="🌐 Starlink & OneWeb">
+        <option value="44238">Starlink-1000 (44238)</option>
+        <option value="45258">Starlink-2000 (45258)</option>
+        <option value="44914">Starlink-3000 (44914)</option>
+        <option value="48618">OneWeb-0292 (48618)</option>
+        <option value="48623">OneWeb-0297 (48623)</option>
+        <option value="51044">OneWeb-0500 (51044)</option>
+        <option value="48494">OneWeb-0468 (48494)</option>
+      </optgroup>
+    </select>
+
 
   <div class="orbit-toggle">
     <label class="switch">

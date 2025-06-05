@@ -1,0 +1,53 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}EPIC - Earth Polychromatic Imaging Camera{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/epic.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="epic-container">
+  <h2>🌍 Earth Polychromatic Imaging Camera (EPIC)</h2>
+
+  <form method="get" id="epic-form">
+    <label for="date">Select Date (YYYY-MM-DD):
+      <input type="date" id="date" name="date" value="{{ request.GET.date }}">
+    </label>
+    <button type="submit">Fetch Images</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if images %}
+    <h3>{{ images|length }} Images Found for {{ date }}</h3>
+    <div class="epic-gallery">
+      {% for img in images %}
+        <div class="epic-card">
+          <img src="{{ img.url }}" alt="EPIC Image" loading="lazy">
+          <p><strong>Caption:</strong> {{ img.caption }}</p>
+          <p><strong>Time (UTC):</strong> {{ img.date }}</p>
+          <a href="{{ img.url }}" download class="download-button">Download Image</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Optional Pagination -->
+    <div class="pagination-controls">
+      {% if previous_page %}
+        <a href="?date={{ date }}&page={{ previous_page }}"><button>&laquo; Prev</button></a>
+      {% endif %}
+      {% if next_page %}
+        <a href="?date={{ date }}&page={{ next_page }}"><button>Next &raquo;</button></a>
+      {% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/epic.js' %}"></script>
+{% endblock %}

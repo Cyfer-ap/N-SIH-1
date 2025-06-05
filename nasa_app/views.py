@@ -6,7 +6,7 @@ from django.shortcuts import render
 from datetime import datetime, timedelta, date, timezone
 from nasa_project.settings import NASA_API_KEY
 import logging
-
+import json
 logger = logging.getLogger(__name__)
 PHOTOS_PER_PAGE = 21
 
@@ -340,5 +340,243 @@ def get_satellite_path(request):
         return JsonResponse(response.json())
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
+
+
+SATELLITES = {
+    25544: "ISS (ZARYA)",
+    33591: "NOAA 19",
+    27424: "NOAA 18",
+    25338: "NOAA 15",
+    28654: "TERRA",
+    25994: "AQUA",
+    41765: "SUOMI NPP",
+    43013: "JPSS-1",
+    39469: "METOP-B",
+    29499: "METOP-A",
+    44387: "METOP-C",
+    40069: "FENGYUN 3C",
+    53454: "FENGYUN 3E",
+    27607: "FENGYUN 1D",
+    37849: "NPP",
+    27698: "IKONOS 2",
+    25994: "EOS-PM1 (AQUA)",
+    39084: "METEOR M2",
+    26407: "Landsat 7",
+    39010: "Landsat 8",
+    50171: "Landsat 9",
+    41784: "WorldView-3",
+    40099: "WorldView-2",
+    32953: "WorldView-1",
+    39450: "GeoEye-1",
+    43015: "Sentinel-5P",
+    42063: "Sentinel-2B",
+    41335: "Sentinel-2A",
+    39634: "Sentinel-1B",
+    39422: "Sentinel-1A",
+    51068: "Sentinel-6 Michael Freilich",
+    48274: "Pléiades Neo 3",
+    44932: "COSMO-SkyMed 2nd Gen",
+    43089: "TanDEM-X",
+    35681: "TerraSAR-X",
+    25994: "Aqua",
+    44238: "Starlink-1000",
+    45258: "Starlink-2000",
+    44914: "Starlink-3000",
+    25338: "NOAA 15",
+    41783: "CYGNSS FM1",
+    41784: "CYGNSS FM2",
+    41785: "CYGNSS FM3",
+    41786: "CYGNSS FM4",
+    41787: "CYGNSS FM5",
+    41788: "CYGNSS FM6",
+    41789: "CYGNSS FM7",
+    41790: "CYGNSS FM8",
+    28654: "Terra",
+    44874: "Capella-3",
+    44875: "Capella-4",
+    48618: "OneWeb-0292",
+    48623: "OneWeb-0297",
+    43013: "JPSS-1",
+    43743: "TESS",
+    40379: "GPM Core Observatory",
+    37820: "FLOCK 1B-13",
+}
+
+
+def satellite_above_view(request):
+    passes = []
+    error_msg = ''
+    selected_satname = ''
+
+    if request.GET.get("lat") and request.GET.get("lon") and request.GET.get("satid"):
+        lat = request.GET["lat"]
+        lon = request.GET["lon"]
+        satid = request.GET["satid"]
+        try:
+            selected_satname = SATELLITES.get(int(satid), "Unknown Satellite")
+            url = f"https://api.n2yo.com/rest/v1/satellite/visualpasses/{satid}/{lat}/{lon}/0/3/10?apiKey={settings.N2YO_API_KEY}"
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            passes = data.get("passes", [])
+
+            # ⬇️ Convert timestamps AFTER getting passes
+            for p in passes:
+                p["startUTC"] = datetime.fromtimestamp(p["startUTC"], tz=timezone.utc)
+                p["endUTC"] = datetime.fromtimestamp(p["endUTC"], tz=timezone.utc)
+
+        except Exception as e:
+            error_msg = f"Failed to fetch satellite passes: {str(e)}"
+
+    return render(request, 'nasa_app/satellite_above.html', {
+        'passes': passes,
+        'satellites': SATELLITES,
+        'error_msg': error_msg,
+        'selected_satname': selected_satname
+    })
+
+
+def satellite_info_view(request):
+    info = {}
+    tle_lines = []
+    tle_data = {}
+    error_msg = ''
+
+    if request.GET.get("satid"):
+        satid = request.GET["satid"]
+        url = f"https://api.n2yo.com/rest/v1/satellite/tle/{satid}?apiKey={settings.N2YO_API_KEY}"
+
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+            info = data.get("info", {})
+            tle = data.get("tle", "")
+            tle_lines = tle.strip().splitlines()
+
+            if len(tle_lines) == 2:
+                line1 = tle_lines[0]
+                line2 = tle_lines[1]
+                # Extract and assign fields using slice positions based on TLE format
+                tle_data = {
+                    "Satellite Number": line1[2:7],
+                    "Classification": line1[7],
+                    "International Designator": line1[9:17],
+                    "Epoch": line1[18:32],
+                    "First Derivative of Mean Motion": line1[33:43],
+                    "Second Derivative of Mean Motion": line1[44:52],
+                    "BSTAR drag term": line1[53:61],
+                    "Ephemeris type": line1[62],
+                    "Element set number": line1[64:68],
+                    "Inclination (deg)": line2[8:16],
+                    "RAAN (deg)": line2[17:25],
+                    "Eccentricity": "0." + line2[26:33].strip(),
+                    "Argument of Perigee (deg)": line2[34:42],
+                    "Mean Anomaly (deg)": line2[43:51],
+                    "Mean Motion (rev/day)": line2[52:63],
+                    "Revolution Number at Epoch": line2[64:68]
+                }
+
+        except Exception as e:
+            error_msg = f"Failed to fetch data: {e}"
+
+    return render(request, 'nasa_app/satellite_info.html', {
+        'info': info,
+        'tle_data': tle_data,
+        'tle_raw': "\n".join(tle_lines),
+        'error_msg': error_msg,
+        'satellites': SATELLITES
+    })
+
+def epic_view(request):
+    images = []
+    error_msg = ''
+    date = request.GET.get("date")
+
+    if date:
+        api_url = f"https://api.nasa.gov/EPIC/api/natural/date/{date}?api_key={settings.NASA_API_KEY}"
+        try:
+            response = requests.get(api_url)
+            response.raise_for_status()
+            raw_data = response.json()
+
+            images = [{
+                "url": f"https://epic.gsfc.nasa.gov/archive/natural/{date.replace('-', '/')}/png/{item['image']}.png",
+                "caption": item['caption'],
+                "date": item['date']
+            } for item in raw_data]
+
+        except Exception as e:
+            error_msg = f"Failed to fetch EPIC data: {e}"
+
+    return render(request, 'nasa_app/epic.html', {
+        "images": images,
+        "error_msg": error_msg,
+        "date": date
+    })
+
+
+def exoplanets_view(request):
+    host = request.GET.get("host", "")
+    limit = int(request.GET.get("limit", 50))
+    page = int(request.GET.get("page", 1))
+    sort_by = request.GET.get("sort", "disc_year")
+    sort_order = request.GET.get("order", "DESC")
+
+    # Cap results fetched from API to 1000 or so
+    max_results = 1000
+    base_url = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync"
+
+    # Construct ADQL query using TOP (NOT LIMIT/OFFSET)
+    query = f"""
+        SELECT TOP {max_results} pl_name, hostname, disc_year, pl_orbper, pl_radj, pl_bmassj
+        FROM ps
+        WHERE pl_name IS NOT NULL
+    """
+
+    if host:
+        query += f" AND LOWER(hostname) LIKE '%{host.lower()}%'"
+
+    query += f" ORDER BY {sort_by} {sort_order}"
+
+    params = {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json",
+        "query": query.strip()
+    }
+
+    exoplanets = []
+    error_msg = ""
+    try:
+        response = requests.get(base_url, params=params)
+        response.raise_for_status()
+        all_results = response.json()
+
+        # Manual pagination
+        start_index = (page - 1) * limit
+        end_index = start_index + limit
+        exoplanets = all_results[start_index:end_index]
+
+        total_results = len(all_results)
+        total_pages = (total_results + limit - 1) // limit
+
+    except Exception as e:
+        error_msg = f"Failed to fetch data: {e}"
+        total_pages = 1
+        total_results = 0
+
+    return render(request, "nasa_app/exoplanets.html", {
+        "exoplanets": exoplanets,
+        "error_msg": error_msg,
+        "host": host,
+        "limit": limit,
+        "page": page,
+        "total_pages": total_pages,
+        "sort_by": sort_by,
+        "sort_order": sort_order,
+        "limit_options": [25, 50, 100, 200]
+    })
+
 
 

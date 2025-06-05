@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import exoplanets_view
 
 urlpatterns = [
     path('', views.home, name='home'),  # APOD homepage
@@ -13,6 +14,12 @@ urlpatterns = [
     path("api/iss-passes/", views.get_iss_passes, name="get_iss_passes"),
     path("api/satellite-position/", views.get_satellite_position, name="satellite_position"),
     path("api/satellite-path/", views.get_satellite_path, name="satellite-path"),
+    path('satellite/above/', views.satellite_above_view, name='satellite_above'),
+    path("satellite/info/", views.satellite_info_view, name="satellite_info"),
+    path('epic/', views.epic_view, name='epic'),
+    path('exoplanets/', exoplanets_view, name='exoplanets'),
+
+
 
 
 ]

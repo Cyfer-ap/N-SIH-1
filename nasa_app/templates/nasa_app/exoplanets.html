@@ -1,0 +1,85 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Exoplanet Archive{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/exoplanets.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="exoplanet-container">
+  <h2>🪐 NASA Exoplanet Archive</h2>
+  <form method="get" class="filter-form">
+    <label>Host Star Name:
+      <input type="text" name="host" value="{{ host }}">
+    </label>
+
+    <label>Results:
+      <select name="limit">
+        {% for l in limit_options %}
+          <option value="{{ l }}" {% if l == limit %} selected{% endif %}>{{ l }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Sort By:
+      <select name="sort">
+        <option value="disc_year" {% if sort_by == 'disc_year' %}selected{% endif %}>Discovery Year</option>
+        <option value="pl_orbper" {% if sort_by == 'pl_orbper' %}selected{% endif %}>Orbital Period</option>
+        <option value="pl_radj" {% if sort_by == 'pl_radj' %}selected{% endif %}>Radius</option>
+        <option value="pl_bmassj" {% if sort_by == 'pl_bmassj' %}selected{% endif %}>Mass</option>
+      </select>
+    </label>
+
+    <label>Order:
+      <select name="order">
+        <option value="DESC" {% if sort_order == 'DESC' %}selected{% endif %}>Descending</option>
+        <option value="ASC" {% if sort_order == 'ASC' %}selected{% endif %}>Ascending</option>
+      </select>
+    </label>
+
+    <button type="submit">Apply Filters</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if exoplanets %}
+    <h3>Showing {{ exoplanets|length }} Results</h3>
+    <table class="exo-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Host</th>
+          <th>Year</th>
+          <th>Orbital Period (days)</th>
+          <th>Radius (Jupiter)</th>
+          <th>Mass (Jupiter)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in exoplanets %}
+        <tr>
+          <td>{{ p.pl_name }}</td>
+          <td>{{ p.hostname }}</td>
+          <td>{{ p.disc_year }}</td>
+          <td>{{ p.pl_orbper|default:"N/A" }}</td>
+          <td>{{ p.pl_radj|default:"N/A" }}</td>
+          <td>{{ p.pl_bmassj|default:"N/A" }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="pagination">
+      {% if page > 1 %}
+        <a href="?{% if host %}host={{ host }}&{% endif %}limit={{ limit }}&sort={{ sort_by }}&order={{ sort_order }}&page={{ page|add:"-1" }}">⬅️ Previous</a>
+      {% endif %}
+      <span>Page {{ page }}</span>
+      <a href="?{% if host %}host={{ host }}&{% endif %}limit={{ limit }}&sort={{ sort_by }}&order={{ sort_order }}&page={{ page|add:"1" }}">Next ➡️</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
