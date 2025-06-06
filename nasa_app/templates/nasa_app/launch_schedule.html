@@ -1,0 +1,54 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Launch Schedule{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/launch_schedule.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="launch-container">
+  <h2>🚀 Launch Schedule</h2>
+
+  <form method="get" class="filter-form">
+    <input type="text" name="search" placeholder="Search by mission..." value="{{ search }}">
+    <input type="date" name="start" value="{{ start }}">
+    <input type="date" name="end" value="{{ end }}">
+
+    <button type="submit">🔍 Filter</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if grouped_launches %}
+    {% for month, launches in grouped_launches.items %}
+      <h3 class="launch-month">{{ month }}</h3>
+      {% for launch in launches %}
+        <div class="launch-card">
+          {% if launch.image %}
+            <img src="{{ launch.image }}" alt="Launch Image">
+          {% endif %}
+          <div class="launch-details">
+            <h4>{{ launch.name }}</h4>
+            <p><strong>Date:</strong> {{ launch.date }}</p>
+            <p><strong>Rocket:</strong> {{ launch.rocket }}</p>
+            <p><strong>Location:</strong> {{ launch.pad }}, {{ launch.location }}</p>
+            <p><strong>Status:</strong>
+              <span class="status-badge {{ launch.badge_color }}">{{ launch.status }}</span>
+            </p>
+            <p><strong>Mission:</strong> {{ launch.mission|truncatewords:25 }}</p>
+            {% if launch.video %}
+              <p><a href="{{ launch.video }}" target="_blank">🎥 Watch Live</a></p>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% endfor %}
+  {% else %}
+    <p class="note">No launches found for the selected filters.</p>
+  {% endif %}
+</div>
+{% endblock %}

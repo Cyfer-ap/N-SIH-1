@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .views import exoplanets_view, techtransfer_view, tech_detail_view
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),  # APOD homepage
@@ -21,8 +23,7 @@ urlpatterns = [
     path("neows/", views.neows_view, name="neows"),
     path("techtransfer/", techtransfer_view, name="techtransfer"),
     path("techtransfer/<str:tech_id>/", tech_detail_view, name="tech_detail"),
+    path('launches/', views.launch_schedule_view, name='launch_schedule'),
 ]
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

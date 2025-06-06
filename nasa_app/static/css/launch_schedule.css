@@ -1,0 +1,185 @@
+/* Root container */
+.launch-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1.5rem 2rem;
+  font-family: 'Helvetica Neue', 'Segoe UI', sans-serif;
+  background-color: #f4f8fb;
+}
+
+/* Title */
+.launch-container h2 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #0b3d91;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Filter Form */
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.filter-form input[type="text"],
+.filter-form input[type="date"] {
+  padding: 0.6rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: #ffffff;
+  min-width: 180px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  transition: border-color 0.3s ease;
+}
+
+.filter-form input:focus {
+  border-color: #0b3d91;
+  outline: none;
+}
+
+.filter-form button {
+  background-color: #0b3d91;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.filter-form button:hover {
+  background-color: #062b67;
+}
+
+/* Monthly group label */
+.launch-month {
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 2rem 0 1rem;
+  color: #1c1c1c;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.25rem;
+}
+
+/* Launch card */
+.launch-card {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.launch-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Image */
+.launch-card img {
+  width: 220px;
+  height: 100%;
+  object-fit: cover;
+  background-color: #eaeaea;
+}
+
+/* Details section */
+.launch-details {
+  flex: 1;
+  padding: 1.2rem 1.5rem;
+}
+
+.launch-details h4 {
+  font-size: 1.25rem;
+  color: #002244;
+  margin: 0 0 0.6rem;
+}
+
+.launch-details p {
+  font-size: 0.95rem;
+  margin: 0.4rem 0;
+  color: #444;
+  line-height: 1.4;
+}
+
+/* Watch live link */
+.launch-details a {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: #0b3d91;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.launch-details a:hover {
+  text-decoration: underline;
+}
+
+/* Status badge styling */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+/* Status variants */
+.status-badge.success {
+  background-color: #28a745;
+}
+
+.status-badge.failed {
+  background-color: #dc3545;
+}
+
+.status-badge.pending {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.status-badge.tbd {
+  background-color: #6c757d;
+}
+
+/* Error and note messages */
+.error {
+  color: #dc3545;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.note {
+  text-align: center;
+  color: #555;
+  font-style: italic;
+  margin-top: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .launch-card {
+    flex-direction: column;
+  }
+
+  .launch-card img {
+    width: 100%;
+    height: 200px;
+  }
+
+  .filter-form {
+    flex-direction: column;
+    align-items: center;
+  }
+}
