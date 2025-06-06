@@ -1,0 +1,157 @@
+.tech-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  background: linear-gradient(145deg, #0e1724, #1a2638);
+  border-radius: 18px;
+  color: #E0F7FA;
+  font-family: 'Inter', sans-serif;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.tech-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: #00C2FF;
+  margin-bottom: 30px;
+}
+
+/* Search Form */
+.search-form {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.search-form input[type="text"] {
+  padding: 12px 16px;
+  border: 2px solid #0B3D91;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #1A2A4A;
+  color: #E0F7FA;
+  min-width: 250px;
+}
+
+.search-form input:focus {
+  border-color: #00C2FF;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 194, 255, 0.3);
+}
+
+.search-form button {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #0B3D91, #062A68);
+  border: none;
+  border-radius: 8px;
+  color: #E0F7FA;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(11, 61, 145, 0.4);
+}
+
+/* Cards Layout */
+.patents {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.card {
+  background: #1A2A4A;
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+}
+
+.card img {
+  width: 100%;
+  max-height: 160px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background: #0e1724;
+}
+
+.card h3 {
+  font-size: 1.1rem;
+  color: #00C2FF;
+  margin-bottom: 10px;
+}
+
+.card p {
+  font-size: 0.95rem;
+  color: #CFE8F9;
+  margin-bottom: 12px;
+  flex-grow: 1;
+}
+
+.view-details {
+  margin-top: auto;
+  display: inline-block;
+  padding: 10px 20px;
+  background: #198754;
+  color: #E0F7FA;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+}
+
+.view-details:hover {
+  background: #146C43;
+  transform: translateY(-2px);
+}
+
+/* Notes and Errors */
+.note {
+  text-align: center;
+  font-size: 1rem;
+  color: #B0BEC5;
+  margin-top: 30px;
+}
+
+.error {
+  color: #ff6b6b;
+  background: #2e0f0f;
+  padding: 12px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 500;
+  margin: 20px 0;
+}
+
+@media (max-width: 600px) {
+  .search-form {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-form input,
+  .search-form button {
+    width: 100%;
+  }
+
+  .card p {
+    font-size: 0.9rem;
+  }
+}

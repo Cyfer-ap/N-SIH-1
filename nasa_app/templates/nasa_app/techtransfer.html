@@ -1,0 +1,37 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}NASA Tech Transfer{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/techtransfer.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="tech-container">
+  <h2>🔧 NASA Tech Transfer</h2>
+  <form method="get" class="search-form">
+    <input type="text" name="search" placeholder="Search technology..." value="{{ search }}">
+    <button type="submit">Search</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if patents %}
+    <div class="patents">
+      {% for item in patents %}
+        <div class="card">
+          <img src="{{ item.image }}" alt="{{ item.title }}">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.desc }}</p>
+          <a href="{% url 'tech_detail' item.id %}" class="view-details">View Details</a>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="note">Enter a keyword to explore NASA patents and innovations.</p>
+  {% endif %}
+</div>
+{% endblock %}

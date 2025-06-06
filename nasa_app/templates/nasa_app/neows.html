@@ -1,0 +1,103 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Near-Earth Object Tracker{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/neows.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="neows-container">
+  <h2>☄️ Near-Earth Object Tracker</h2>
+  <form method="get">
+    <label for="start_date">Start Date:
+      <input type="date" id="start_date" name="start_date" value="{{ start_date }}" max="{{ today }}">
+    </label>
+    <label for="end_date">End Date:
+      <input type="date" id="end_date" name="end_date" value="{{ end_date }}">
+    </label>
+    <button type="submit">Fetch NEOs</button>
+  </form>
+
+  {% if error_msg %}
+    <p class="error">{{ error_msg }}</p>
+  {% endif %}
+
+  {% if neos %}
+    <h3>Near-Earth Objects from {{ start_date }} to {{ end_date }}</h3>
+    <table class="neo-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Diameter (m)</th>
+          <th>Hazardous</th>
+          <th>Velocity (km/h)</th>
+          <th>Miss Distance (km)</th>
+          <th>Close Approach Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for neo in neos %}
+        <tr>
+          <td>{{ neo.name }}</td>
+          <td>{{ neo.diameter_min|floatformat:2 }} – {{ neo.diameter_max|floatformat:2 }}</td>
+          <td>{% if neo.hazardous %}Yes{% else %}No{% endif %}</td>
+          <td>{{ neo.velocity|floatformat:0 }}</td>
+          <td>{{ neo.miss_distance|floatformat:0 }}</td>
+          <td>{{ neo.close_approach_date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="neo-charts">
+      <canvas id="countByDateChart"></canvas>
+      <canvas id="hazardousPieChart"></canvas>
+      <canvas id="missDistanceChart"></canvas>
+      <canvas id="sizeDistributionChart"></canvas>
+      <canvas id="speedChart"></canvas>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const neoData = {{ neos_json }};
+  console.log("Loaded NEO data:", neoData);
+</script>
+
+<script src="{% static 'js/neows.js' %}"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const startInput = document.getElementById("start_date");
+          const endInput = document.getElementById("end_date");
+
+          function updateEndDateLimit() {
+            if (!startInput.value) return;
+
+            const startDate = new Date(startInput.value);
+            const maxDate = new Date(startDate);
+            maxDate.setDate(startDate.getDate() + 7);
+
+            endInput.min = startInput.value;
+            endInput.max = maxDate.toISOString().split("T")[0];
+
+            // Adjust end date if it's out of new bounds
+            if (new Date(endInput.value) > maxDate) {
+              endInput.value = maxDate.toISOString().split("T")[0];
+            }
+          }
+
+          startInput.addEventListener("change", updateEndDateLimit);
+
+          // Initial setup
+          updateEndDateLimit();
+        });
+    </script>
+
+
+{% endblock %}

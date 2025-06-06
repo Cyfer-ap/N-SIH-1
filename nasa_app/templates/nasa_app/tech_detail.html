@@ -1,0 +1,53 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Technology Details{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/tech_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="tech-detail">
+
+  <h2>{{ tech.title|default:"Untitled" }}</h2>
+
+  {% if tech.image %}
+    <img src="{{ tech.image }}" alt="{{ tech.title }}" class="tech-image">
+  {% endif %}
+
+  <p><strong>ID:</strong> {{ tech.id|default:"N/A" }}</p>
+  <p><strong>Center:</strong> {{ tech.center|default:"N/A" }}</p>
+
+  <p><strong>Categories:</strong>
+    {% if tech.categories %}
+      {{ tech.categories|join:", " }}
+    {% else %}
+      N/A
+    {% endif %}
+  </p>
+
+  <p><strong>Summary:</strong> {{ tech.desc|default:"No description available." }}</p>
+
+  {% if tech.application %}
+    <p><strong>Application:</strong> {{ tech.application }}</p>
+  {% endif %}
+
+  {% if tech.benefit %}
+    <p><strong>Benefits:</strong> {{ tech.benefit }}</p>
+  {% endif %}
+
+  {% if tech.trl %}
+    <p><strong>Technology Readiness Level (TRL):</strong> {{ tech.trl }}</p>
+  {% endif %}
+
+  {% if tech.url %}
+    <a href="{{ tech.url }}" target="_blank" class="button">🔗 View on NASA Site</a>
+  {% endif %}
+
+</div>
+
+{% if error_msg %}
+  <p class="error">{{ error_msg }}</p>
+{% endif %}
+{% endblock %}
