@@ -1,31 +1,109 @@
-body {
-  font-family: Arial, sans-serif;
-  background-color: #0b0c10;
-  color: #c5c6c7;
+/* ========== Global Reset & Base ========== */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f0f4f9;
+  color: #1a1a1a;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ========== Header (Light + Clean) ========== */
 header {
-  background: #1f2833;
-  padding: 1em;
-  text-align: center;
+  background: linear-gradient(to right, #e6f0ff, #d0e4ff); /* Light sky-blue gradient */
+  color: #1a1a1a;
+  padding: 0.6rem 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #d0dcec;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-a {
-  color: #66fcf1;
+header h1 a {
+  color: #0b3d91;
   text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
 }
 
-img {
-  max-width: 90%;
-  margin: 1em auto;
-  display: block;
+header nav {
+  margin-top: 0.3rem;
 }
 
+header nav a {
+  color: #0b3d91;
+  text-decoration: none;
+  margin-left: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+header nav a:hover {
+  color: #1453b1;
+}
+
+/* ========== Main Content ========== */
+main {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* ========== Footer (Compact) ========== */
 footer {
+  background-color: #e6f0ff;
+  color: #0b3d91;
   text-align: center;
-  padding: 1em;
-  background-color: #1f2833;
-  color: #45a29e;
+  padding: 0.4rem 0; /* Reduced height */
+  font-size: 0.75rem; /* Slightly smaller text */
+  border-top: 1px solid #cdd8e8;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.03);
+}
+
+/* ========== Utility Classes ========== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header nav {
+    margin-top: 0.6rem;
+  }
+
+  header nav a {
+    display: block;
+    margin: 0.3rem 0;
+  }
+
+  main {
+    padding: 1.2rem;
+  }
 }

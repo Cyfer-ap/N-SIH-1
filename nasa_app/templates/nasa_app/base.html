@@ -3,14 +3,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}NASA Explorer{% endblock %}</title>
+  <title>{% block title %}Blue Dot{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
   {% block styles %}{% endblock %}
 </head>
 <body>
   <header>
-    <h1><a href="{% url 'home' %}">NASA Explorer</a></h1>
+    <h1><a href="{% url 'home' %}">Blue Dot</a></h1>
     <nav>
 
       <!-- Add more feature links here -->
@@ -22,10 +22,9 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 NASA API Project</p>
+    <p>&copy; 2025 NASA API Project :: Cyfer</p>
   </footer>
 
-  <script src="{% static 'js/main.js' %}"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

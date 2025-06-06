@@ -3,11 +3,12 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_GET
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from datetime import datetime, timedelta, date, timezone
 from nasa_project.settings import NASA_API_KEY
 import logging
 import json
+from collections import defaultdict
 logger = logging.getLogger(__name__)
 PHOTOS_PER_PAGE = 21
 
@@ -702,6 +703,90 @@ def tech_detail_view(request, tech_id):
 
 
 
+def launch_schedule_view(request):
+    today = datetime.utcnow().date()
+    default_start = today - timedelta(days=180)
+    default_end = today + timedelta(days=180)
 
+    search_query = request.GET.get('search', '').lower()
+    start_date_str = request.GET.get('start')
+    end_date_str = request.GET.get('end')
 
+    try:
+        start_date = datetime.fromisoformat(start_date_str).date() if start_date_str else default_start
+    except ValueError:
+        start_date = default_start
 
+    try:
+        end_date = datetime.fromisoformat(end_date_str).date() if end_date_str else default_end
+    except ValueError:
+        end_date = default_end
+
+    api_url = (
+        f"https://ll.thespacedevs.com/2.2.0/launch/?limit=100&ordering=window_start"
+        f"&window_start__gte={start_date.isoformat()}&window_start__lte={end_date.isoformat()}"
+    )
+
+    grouped_launches = defaultdict(list)
+    error_msg = ""
+
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        data = response.json()
+
+        for item in data.get("results", []):
+            name = item.get("name", "Unknown")
+            date_str = item.get("window_start")
+            if not date_str:
+                continue
+
+            try:
+                launch_date = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
+            except ValueError:
+                continue
+
+            if launch_date.date() < start_date or launch_date.date() > end_date:
+                continue
+
+            if search_query and search_query not in name.lower():
+                continue
+
+            pad = item.get("pad") or {}
+            pad_location = pad.get("location") or {}
+            rocket = item.get("rocket") or {}
+            configuration = rocket.get("configuration") or {}
+            mission = item.get("mission") or {}
+            status_data = item.get("status") or {}
+            status = status_data.get("name", "Unknown")
+
+            badge_color = {
+                "Go": "green",
+                "Success": "blue",
+                "Hold": "orange",
+                "Failure": "red"
+            }.get(status, "gray")
+
+            grouped_launches[launch_date.strftime("%B %Y")].append({
+                "name": name,
+                "date": launch_date.strftime("%Y-%m-%d"),
+                "rocket": configuration.get("name", "Unknown"),
+                "location": pad_location.get("name", "Unknown"),
+                "pad": pad.get("name", "Unknown"),
+                "mission": mission.get("description", "No mission details."),
+                "image": item.get("image"),
+                "video": (item.get("vidURLs") or [None])[0],
+                "status": status,
+                "badge_color": badge_color
+            })
+
+    except Exception as e:
+        error_msg = f"Failed to load launch data: {e}"
+
+    return render(request, "nasa_app/launch_schedule.html", {
+        "grouped_launches": dict(grouped_launches),
+        "search": search_query,
+        "start": start_date.strftime('%Y-%m-%d'),
+        "end": end_date.strftime('%Y-%m-%d'),
+        "error_msg": error_msg
+    })

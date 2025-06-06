@@ -5,20 +5,19 @@
 <link rel="stylesheet" href="{% static 'css/home.css' %}">
 {% endblock %}
 
-{% block title %}Home - NASA Explorer{% endblock %}
+{% block title %}Blue Dot{% endblock %}
 
 {% block content %}
-  <h2>Welcome to NASA Explorer</h2>
-  <p>Start exploring data from NASA APIs!</p>
+  <h2>🌌 Welcome to Blue Dot</h2>
+  <p>Explore real-time data and insights from NASA and ISRO missions</p>
 
   <label for="categorySelect"><strong>Select Category:</strong></label>
   <select id="categorySelect" onchange="showCategoryLinks()">
-    <option value="space">Space</option>
-    <option value="land">Land</option>
-    <option value="ocean">Ocean</option>
+    <option value="nasa">🚀 NASA</option>
+    <option value="isro">🛰️ ISRO</option>
   </select>
 
-  <ul id="spaceLinks" class="category-links">
+  <ul id="nasaLinks" class="category-links category-section hidden">
     <li><a href="{% url 'apod' %}">Astronomy Picture of the Day</a></li>
     <li><a href="{% url 'mars_rover' %}">Mars Rover Photos</a></li>
     <li><a href="{% url 'library' %}">Images and Video Search</a></li>
@@ -26,31 +25,42 @@
     <li><a href="{% url 'space_weather_view' %}">Space Weather Tracker</a></li>
     <li><a href="{% url 'iss_tracker' %}">ISS Tracker</a></li>
     <li><a href="{% url 'satellite_above' %}">Above Location Tracker</a></li>
-    <li><a href="{% url 'satellite_info' %}">🔍 Satellite Info</a></li>
-    <li><a href="{% url 'epic' %}">🌍 EPIC Earth Images</a></li>
-    <li><a href="{% url 'exoplanets' %}">🪐 Exoplanet Archive</a></li>
-    <li><a href="{% url 'neows' %}">☄️ Near-Earth Object Tracker</a></li>
-    <li><a href="{% url 'techtransfer' %}">🚀 NASA Tech Transfer</a></li>
-
+    <li><a href="{% url 'satellite_info' %}">Satellite Info</a></li>
+    <li><a href="{% url 'epic' %}">EPIC Earth Images</a></li>
+    <li><a href="{% url 'exoplanets' %}">Exoplanet Archive</a></li>
+    <li><a href="{% url 'neows' %}">Near-Earth Object Tracker</a></li>
+    <li><a href="{% url 'techtransfer' %}">NASA Tech Transfer</a></li>
+    <li><a href="{% url 'launch_schedule' %}">Launch Schedule</a></li>
+    <li><a href="{% url 'earth_view' %}">Earth Imagery</a></li>
+    <li><a href="{% url 'space_weather_view' %}">Space Weather Dashboard</a></li>
+    <li><a href="{% url 'techtransfer' %}">NASA Technologies</a></li>
   </ul>
 
-  <ul id="landLinks" class="category-links" style="display: none;">
-    <li><a href="#">Land Observation Tool</a></li>
-    <li><a href="#">Deforestation Tracker</a></li>
-    <li><a href="#">Land Cover Explorer</a></li>
-  </ul>
-
-  <ul id="oceanLinks" class="category-links" style="display: none;">
-    <li><a href="#">Ocean Temperature Monitor</a></li>
-    <li><a href="#">Marine Life Visualizer</a></li>
-    <li><a href="#">Sea Level Data Viewer</a></li>
+  <ul id="isroLinks" class="category-links category-section hidden">
+    <li><a href="#">ISRO Launch List (Demo)</a></li>
+    <li><a href="#">Chandrayaan Missions (Demo)</a></li>
+    <li><a href="#">Gaganyaan Crew Overview (Demo)</a></li>
   </ul>
 
   <script>
-    function showCategoryLinks() {
-      const selected = document.getElementById('categorySelect').value;
-      document.querySelectorAll('.category-links').forEach(list => list.style.display = 'none');
-      document.getElementById(selected + 'Links').style.display = 'block';
-    }
-  </script>
+  function showCategoryLinks() {
+    const selected = document.getElementById('categorySelect').value;
+
+    document.querySelectorAll('.category-links').forEach(list => {
+      list.classList.add('hidden');
+    });
+
+    const target = document.getElementById(selected + 'Links');
+    if (target) target.classList.remove('hidden');
+  }
+
+  // 🔁 Ensure default NASA section shows on page load
+  window.addEventListener('DOMContentLoaded', function () {
+    document.getElementById("categorySelect").value = "nasa";
+    showCategoryLinks();
+  });
+</script>
+
+
+
 {% endblock %}
