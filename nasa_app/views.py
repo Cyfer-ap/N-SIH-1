@@ -1,6 +1,7 @@
 import requests
 from django.conf import settings
 from django.http import JsonResponse
+from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_GET
 from django.shortcuts import render
 from datetime import datetime, timedelta, date, timezone
@@ -577,6 +578,130 @@ def exoplanets_view(request):
         "sort_order": sort_order,
         "limit_options": [25, 50, 100, 200]
     })
+
+
+def neows_view(request):
+    start_date = request.GET.get("start_date", date.today().isoformat())
+    end_date = request.GET.get("end_date", (date.today() + timedelta(days=1)).isoformat())
+
+    try:
+        start_dt = datetime.strptime(start_date, "%Y-%m-%d")
+        end_dt = datetime.strptime(end_date, "%Y-%m-%d")
+        if (end_dt - start_dt).days > 7:
+            end_dt = start_dt + timedelta(days=7)
+            end_date = end_dt.date().isoformat()
+    except ValueError:
+        # fallback in case of bad input
+        start_date = date.today().isoformat()
+        end_date = (date.today() + timedelta(days=1)).isoformat()
+
+    api_url = "https://api.nasa.gov/neo/rest/v1/feed"
+    params = {
+        "start_date": start_date,
+        "end_date": end_date,
+        "api_key": settings.NASA_API_KEY  # Replace with your actual API key if available
+    }
+
+    neos = []
+    error_msg = ""
+
+    try:
+        response = requests.get(api_url, params=params)
+        response.raise_for_status()
+        data = response.json()
+
+        for date_str in data["near_earth_objects"]:
+            for obj in data["near_earth_objects"][date_str]:
+                approach = obj["close_approach_data"][0]
+                neos.append({
+                    "name": obj["name"],
+                    "hazardous": obj["is_potentially_hazardous_asteroid"],
+                    "diameter_min": obj["estimated_diameter"]["meters"]["estimated_diameter_min"],
+                    "diameter_max": obj["estimated_diameter"]["meters"]["estimated_diameter_max"],
+                    "velocity": float(approach["relative_velocity"]["kilometers_per_hour"]),
+                    "miss_distance": float(approach["miss_distance"]["kilometers"]),
+                    "close_approach_date": approach["close_approach_date"]
+                })
+        neos.sort(key=lambda x: x["close_approach_date"])
+    except Exception as e:
+        error_msg = f"Failed to fetch data: {e}"
+
+    return render(request, "nasa_app/neows.html", {
+        "neos": neos,
+        "neos_json": mark_safe(json.dumps(neos)),
+        "start_date": start_date,
+        "end_date": end_date,
+        "error_msg": error_msg,
+        "today": date.today().isoformat()
+    })
+
+
+
+
+def techtransfer_view(request):
+    search_term = request.GET.get("search", "").lower()
+    api_url = f"https://api.nasa.gov/techtransfer/patent/?engine&api_key={NASA_API_KEY}"
+
+    patents = []
+    full_patent_map = {}
+    error_msg = ""
+
+    try:
+        response = requests.get(api_url)
+        response.raise_for_status()
+        records = response.json().get("results", [])
+
+        for record in records:
+            title = record[2]
+            if search_term in title.lower():
+                tech = {
+                    "id": record[0],
+                    "title": title or "Untitled",
+                    "url": f"https://technology.nasa.gov/patent/{record[1]}",
+                    "image": record[10] or "",
+                    "desc": record[3] or "No description available.",
+                    "center": record[4] or "N/A",
+                    "application": record[5] or "N/A",
+                    "benefit": record[6] or "N/A",
+                    "categories": (
+                        record[7] if isinstance(record[7], list)
+                        else ([record[7]] if record[7] else ["N/A"])
+                    ),
+                    "trl": record[8] or "N/A"
+                }
+                patents.append(tech)
+                full_patent_map[record[0]] = tech
+
+        request.session['tech_patents'] = full_patent_map
+
+    except Exception as e:
+        error_msg = f"Failed to fetch data: {e}"
+
+    return render(request, "nasa_app/techtransfer.html", {
+        "patents": patents,
+        "search": search_term,
+        "error_msg": error_msg
+    })
+
+
+def tech_detail_view(request, tech_id):
+    tech = {}
+    error_msg = ""
+
+    tech_patents = request.session.get("tech_patents", {})
+
+    if tech_id in tech_patents:
+        tech = tech_patents[tech_id]
+    else:
+        error_msg = "No data found for this patent."
+
+    return render(request, "nasa_app/tech_detail.html", {
+        "tech": tech,
+        "error_msg": error_msg
+    })
+
+
+
 
 
 
