@@ -1,0 +1,49 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}ISRO Missions Explorer{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'isro/css/missions.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="mission-container">
+  <h2>🚀 ISRO Missions Explorer</h2>
+
+  <div class="filter-controls">
+    <input type="text" id="search-box" placeholder="🔍 Search mission name..." />
+
+    <select id="type-filter">
+      <option value="">All Types</option>
+      <option value="Communication">Communication</option>
+      <option value="Navigation">Navigation</option>
+      <option value="Earth Observation">Earth Observation</option>
+      <option value="Radar Imaging">Radar Imaging</option>
+      <option value="Meteorological">Meteorological</option>
+      <option value="Oceanography">Oceanography</option>
+      <option value="Scientific">Scientific</option>
+      <option value="Astronomy">Astronomy</option>
+      <option value="Planetary">Planetary</option>
+      <option value="Solar Mission">Solar Mission</option>
+    </select>
+
+    <select id="year-filter">
+      <option value="">All Years</option>
+    </select>
+
+    <select id="sort-option">
+      <option value="name">Sort by Name</option>
+      <option value="launch_date">Sort by Date</option>
+    </select>
+
+    <button id="apply-filters">🔍 Apply</button>
+  </div>
+
+  <div id="mission-list" class="mission-grid"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'isro/js/missions.js' %}"></script>
+{% endblock %}

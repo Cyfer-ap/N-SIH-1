@@ -9,7 +9,7 @@ urlpatterns = [
     path('apod/', views.apod, name='apod'),  # Handles APOD view
     path('mars/', views.mars_rover_view, name='mars_rover'),
     path('library/', views.image_video_library_view, name='library'),
-    # path('earth/', earth_view, name='earth'),
+
     path('earth/', views.earth_view, name='earth_view'),
     path('space-weather/', views.space_weather_view, name='space_weather_view'),
     path("iss-tracker/", views.iss_tracker, name="iss_tracker"),
