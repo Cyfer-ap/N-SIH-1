@@ -87,7 +87,7 @@ nasa_project/
 
 ## 🌐 Live Demo (Coming Soon)
 
-This project will be deployed on **Render.com** or **PythonAnywhere**. Stay tuned for the demo link.
+**https://n-sih-1.onrender.com**
 
 ---
 
