@@ -13,13 +13,14 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  scroll-behavior: smooth;
 }
 
-/* ========== Header (Light + Clean) ========== */
+/* ========== Header (Refined Modern Look) ========== */
 header {
-  background: linear-gradient(to right, #e6f0ff, #d0e4ff); /* Light sky-blue gradient */
+  background: linear-gradient(to right, #e6f0ff, #d0e4ff);
   color: #1a1a1a;
-  padding: 0.6rem 1.2rem;
+  padding: 0.8rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -34,46 +35,53 @@ header {
 header h1 a {
   color: #0b3d91;
   text-decoration: none;
-  font-size: 1.4rem;
-  font-weight: 600;
-  letter-spacing: 0.4px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+header h1 a:hover {
+  color: #1453b1;
 }
 
 header nav {
-  margin-top: 0.3rem;
+  margin-top: 0.4rem;
 }
 
 header nav a {
   color: #0b3d91;
   text-decoration: none;
-  margin-left: 1rem;
-  font-size: 0.95rem;
+  margin-left: 1.2rem;
+  font-size: 1rem;
   font-weight: 500;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.2s ease;
 }
 
 header nav a:hover {
   color: #1453b1;
+  transform: scale(1.05);
 }
 
 /* ========== Main Content ========== */
 main {
   flex: 1;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-/* ========== Footer (Compact) ========== */
+/* ========== Footer (Subtle, Cohesive) ========== */
 footer {
   background-color: #e6f0ff;
   color: #0b3d91;
   text-align: center;
-  padding: 0.4rem 0; /* Reduced height */
-  font-size: 0.75rem; /* Slightly smaller text */
+  padding: 0.6rem 0;
+  font-size: 0.8rem;
   border-top: 1px solid #cdd8e8;
-  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.03);
 }
 
 /* ========== Utility Classes ========== */
@@ -85,6 +93,16 @@ footer {
 
 .text-center {
   text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ========== Animations ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ========== Responsive ========== */
@@ -100,7 +118,7 @@ footer {
 
   header nav a {
     display: block;
-    margin: 0.3rem 0;
+    margin: 0.4rem 0;
   }
 
   main {

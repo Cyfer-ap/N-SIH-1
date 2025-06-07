@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'nasa_app.apps.NasaAppConfig',
+    'isro',
 ]
 
 MIDDLEWARE = [

@@ -23,7 +23,7 @@
     <li><a href="{% url 'library' %}">Images and Video Search</a></li>
     <li><a href="{% url 'earth_view' %}">NASA Earth Satellite Imagery</a></li>
     <li><a href="{% url 'space_weather_view' %}">Space Weather Tracker</a></li>
-    <li><a href="{% url 'iss_tracker' %}">ISS Tracker</a></li>
+    <li><a href="{% url 'iss_tracker' %}">Satellite Tracker</a></li>
     <li><a href="{% url 'satellite_above' %}">Above Location Tracker</a></li>
     <li><a href="{% url 'satellite_info' %}">Satellite Info</a></li>
     <li><a href="{% url 'epic' %}">EPIC Earth Images</a></li>
@@ -37,8 +37,8 @@
   </ul>
 
   <ul id="isroLinks" class="category-links category-section hidden">
-    <li><a href="#">ISRO Launch List (Demo)</a></li>
-    <li><a href="#">Chandrayaan Missions (Demo)</a></li>
+    <li><a href="{% url 'satellite_tracker' %}">ISRO Satellite Tracker</a></li>
+    <li><a href="{% url 'isro_missions' %}">ISRO Missions</a></li>
     <li><a href="#">Gaganyaan Crew Overview (Demo)</a></li>
   </ul>
 

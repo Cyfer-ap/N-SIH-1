@@ -1,0 +1,136 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Multi-Satellite Tracker{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="{% static 'isro/css/satellite_tracker.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="iss-container">
+  <h2>🛰️ Real-Time Satellite Tracker</h2>
+
+  <select name="satid" id="satellite-select" required>
+  <optgroup label="🌍 Earth Observation">
+    <option value="39086">SARAL (39086)</option>
+    <option value="40926">RESOURCESAT-2A (40926)</option>
+    <option value="33591">OCEANSAT-2 (33591)</option>
+    <option value="39087">SCATSAT-1 (39087)</option>
+    <option value="50945">EOS-06 / OCEANSAT-3 (50945)</option>
+    <option value="46025">EOS-01 (46025)</option>
+    <option value="53578">EOS-07 (53578)</option>
+  </optgroup>
+
+  <optgroup label="🌦️ Meteorology & Climate">
+    <option value="40938">INSAT-3DR (40938)</option>
+    <option value="41877">INSAT-3DS (41877)</option>
+  </optgroup>
+
+  <optgroup label="📡 Communication & Broadcasting">
+    <option value="40935">GSAT-18 (40935)</option>
+    <option value="43241">GSAT-30 (43241)</option>
+    <option value="43226">GSAT-31 (43226)</option>
+    <option value="48274">GSAT-24 (48274)</option>
+    <option value="44713">IRNSS-1G (44713)</option>
+    <option value="41866">IRNSS-1I (41866)</option>
+  </optgroup>
+
+  <optgroup label="🧭 Navigation (NavIC)">
+    <option value="42863">IRNSS-1H (42863)</option>
+    <option value="43683">IRNSS-1I (43683)</option>
+    <option value="44713">IRNSS-1G (44713)</option>
+  </optgroup>
+
+  <optgroup label="🔭 Science & Astronomy">
+    <option value="39017">AstroSat (39017)</option>
+    <option value="44441">RISAT-2BR1 (44441)</option>
+    <option value="46025">RISAT-2B (46025)</option>
+  </optgroup>
+
+  <optgroup label="🪐 Interplanetary Missions">
+    <option value="39719">Mars Orbiter Mission (Mangalyaan) (39719)</option>
+    <!-- No NORAD ID available yet for Chandrayaan-3 or Aditya-L1 (if added, use static info or simulated path) -->
+  </optgroup>
+</select>
+
+
+
+  <div class="orbit-toggle">
+    <label class="switch">
+      <input type="checkbox" id="toggle-future-path" checked>
+      <span class="slider round"></span>
+    </label>
+    <span>Show Future Path (Green Line)</span>
+  </div>
+  <p id="future-path-note" class="path-note">✅ Green line represents the future orbit path of the satellite (for 90 minutes).</p>
+
+  <div id="map" class="map-container"></div>
+
+  <div class="info-panel">
+    <p><strong>Latitude:</strong> <span id="lat-display">{{ initial_lat }}</span></p>
+    <p><strong>Longitude:</strong> <span id="lon-display">{{ initial_lon }}</span></p>
+    <p class="note">Updated every 5 seconds for selected satellite.</p>
+  </div>
+</div>
+
+<!-- ✅ ISS Live Stream Section -->
+<div class="live-feed-toggle" id="live-feed-toggle" style="display: none;">
+  <label class="switch">
+    <input type="checkbox" id="live-feed-switch" checked>
+    <span class="slider round"></span>
+  </label>
+  <span>Show ISS Live Feed</span>
+</div>
+
+<div id="live-feed-section" class="live-feed-section" style="display: none;">
+  <h3>📺 ISS Live Stream</h3>
+  <p class="stream-note">Live video from cameras aboard the International Space Station</p>
+  <div class="video-wrapper">
+    <iframe
+    width="100%"
+    height="400"
+    src="https://www.youtube.com/embed/H999s0P1Er0?autoplay=1&mute=1"
+    title="ISS Live Feed"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowfullscreen
+  ></iframe>
+  </div>
+</div>
+
+<div class="pass-section">
+  <h3>🔭 Find Next Satellite Pass Over Your Location</h3>
+  <form id="pass-form">
+    <label>City / Place:
+      <input type="text" id="place-input" placeholder="e.g. Delhi">
+    </label>
+    <label>Latitude:
+      <input type="number" step="any" id="pass-lat" placeholder="e.g. 28.6139" required>
+    </label>
+    <label>Longitude:
+      <input type="number" step="any" id="pass-lon" placeholder="e.g. 77.2090" required>
+    </label>
+    <button type="button" id="locate-me">📍 Use My Location</button>
+    <button type="submit">Get Pass Times</button>
+  </form>
+
+  <div id="pass-results" class="pass-results scroll-box">
+    <div class="spinner" style="display: none;">Loading...</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  const initialLat = parseFloat("{{ initial_lat }}");
+  const initialLon = parseFloat("{{ initial_lon }}");
+  const N2YO_API_KEY = "{{ n2yo_api_key }}";
+</script>
+<script src="{% static 'isro/js/satellite_tracker.js' %}"></script>
+
+
+
+{% endblock %}
