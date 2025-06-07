@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: nasa-isro-explorer
+    env: python
+    repo: https://github.com/Cyfer-ap/N-SIH-1
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn nasa_project.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: nasa_project.settings
+      - key: PYTHON_VERSION
+        value: 3.10
+      - key: N2YO_API_KEY
+        sync: false
+      - key: NASA_API_KEY
+        sync: false
