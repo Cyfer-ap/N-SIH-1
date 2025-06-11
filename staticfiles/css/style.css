@@ -1,0 +1,127 @@
+/* ========== Global Reset & Base ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  background-color: #f0f4f9;
+  color: #1a1a1a;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  scroll-behavior: smooth;
+}
+
+/* ========== Header (Refined Modern Look) ========== */
+header {
+  background: linear-gradient(to right, #e6f0ff, #d0e4ff);
+  color: #1a1a1a;
+  padding: 0.8rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #d0dcec;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+header h1 a {
+  color: #0b3d91;
+  text-decoration: none;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: color 0.3s ease;
+}
+
+header h1 a:hover {
+  color: #1453b1;
+}
+
+header nav {
+  margin-top: 0.4rem;
+}
+
+header nav a {
+  color: #0b3d91;
+  text-decoration: none;
+  margin-left: 1.2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+header nav a:hover {
+  color: #1453b1;
+  transform: scale(1.05);
+}
+
+/* ========== Main Content ========== */
+main {
+  flex: 1;
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ========== Footer (Subtle, Cohesive) ========== */
+footer {
+  background-color: #e6f0ff;
+  color: #0b3d91;
+  text-align: center;
+  padding: 0.6rem 0;
+  font-size: 0.8rem;
+  border-top: 1px solid #cdd8e8;
+  box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.03);
+}
+
+/* ========== Utility Classes ========== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ========== Animations ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  header nav {
+    margin-top: 0.6rem;
+  }
+
+  header nav a {
+    display: block;
+    margin: 0.4rem 0;
+  }
+
+  main {
+    padding: 1.2rem;
+  }
+}

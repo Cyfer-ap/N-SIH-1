@@ -1,0 +1,61 @@
+.earth-container {
+  max-width: 600px;
+  margin: 30px auto;
+  font-family: Arial, sans-serif;
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+label {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input {
+  padding: 8px;
+  font-size: 14px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #0070d1;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 24px;
+  flex: 1 1 100%;
+}
+
+button:hover {
+  background-color: #005bb5;
+}
+
+.error {
+  color: #d8000c;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.image-wrapper {
+  text-align: center;
+}
+
+.image-wrapper img {
+  max-width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  margin-top: 10px;
+}
