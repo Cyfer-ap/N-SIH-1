@@ -1,0 +1,34 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Known Celestial Body Counts{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'solar/css/known_body_counter.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🌌 Known Celestial Body Counts</h1>
+
+    {% if error %}
+        <p class="error">Error: {{ error }}</p>
+    {% elif data %}
+        {% for entry in data %}
+            <div class="card" data-type="{{ entry.id }}">
+                <div class="card-header">
+                    <strong>{{ entry.id|capfirst }}</strong>: {{ entry.knownCount }}
+                    <br><small>Last Updated: {{ entry.updateDate }}</small>
+                </div>
+                <div class="card-body" id="details-{{ entry.id }}"></div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No data available.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'solar/js/known_body_counter.js' %}"></script>
+{% endblock %}

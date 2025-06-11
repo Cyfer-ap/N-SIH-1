@@ -1,0 +1,66 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Celestial Body Profile{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'solar/css/body_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🔭 Celestial Body Profile</h1>
+
+    <form method="get" action="{% url 'body_profile' %}">
+        <label for="type-select">Filter by type:</label>
+        <select id="type-select">
+            <option value="">-- All Types --</option>
+            <option value="Planet">Planet</option>
+            <option value="Moon">Moon</option>
+            <option value="Dwarf Planet">Dwarf Planet</option>
+            <option value="Comet">Comet</option>
+            <option value="Asteroid">Asteroid</option>
+        </select>
+
+        <div class="autocomplete-wrapper">
+            <input type="text" name="id" id="search-box" placeholder="Start typing (e.g. Earth, Ceres)" autocomplete="off" required>
+            <div id="suggestions"></div>
+        </div>
+
+        <button type="submit">View</button>
+    </form>
+
+    <label for="body-select">Choose from list:</label>
+    <select id="body-select">
+        <option value="">-- Select a body --</option>
+    </select>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% elif body %}
+        <div class="profile-card">
+            <h2>{{ body.englishName }}</h2>
+            <p><strong>ID:</strong> {{ body.id }}</p>
+            <p><strong>Type:</strong> {{ body.bodyType }}</p>
+            <p><strong>Mass:</strong> {{ body.mass.value|default:"N/A" }} × 10^{{ body.mass.exponent|default:"" }} kg</p>
+            <p><strong>Radius:</strong> {{ body.meanRadius|default:"N/A" }} km</p>
+            <p><strong>Gravity:</strong> {{ body.gravity|default:"N/A" }} m/s²</p>
+            <p><strong>Density:</strong> {{ body.density|default:"N/A" }} g/cm³</p>
+            <p><strong>Escape Velocity:</strong> {{ body.escape|default:"N/A" }} m/s</p>
+            <p><strong>Discovery:</strong> {{ body.discoveryDate|default:"N/A" }} by {{ body.discoveredBy|default:"N/A" }}</p>
+            {% if body.moons %}
+                <p><strong>Moons:</strong> {{ body.moons|length }}</p>
+                <ul>
+                    {% for moon in body.moons %}
+                        <li>{{ moon.moon }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'solar/js/autocomplete.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,102 @@
+/* known_body_counter.css */
+
+body {
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 40px 30px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.2em;
+    margin-bottom: 40px;
+    color: #ffffff;
+    text-shadow: 2px 2px 6px #000;
+}
+
+.error {
+    color: #ff6b6b;
+    font-weight: bold;
+    background-color: rgba(255, 0, 0, 0.15);
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.2);
+    margin: 20px auto;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.07);
+    margin-bottom: 20px;
+    padding: 20px;
+    border-left: 5px solid #ffd700;
+    border-radius: 12px;
+    text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card-header {
+    font-size: 1.3em;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.card-header small {
+    display: block;
+    color: #ccc;
+    font-size: 0.9em;
+    margin-top: 4px;
+}
+
+.card-body {
+    color: #ffffff;
+    font-size: 1em;
+    padding-top: 10px;
+}
+
+p {
+    font-size: 1.1em;
+    color: #eee;
+}
+
+.load-more {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #00ffff;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.load-more:hover {
+    background-color: #00cccc;
+}
+
+.body-list a {
+    color: #00ffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+.body-list a:hover {
+    text-decoration: underline;
+}
+
+

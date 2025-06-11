@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'nasa_app.apps.NasaAppConfig',
     'isro',
+    'solar',
 ]
 
 MIDDLEWARE = [
