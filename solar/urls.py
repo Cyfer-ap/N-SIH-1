@@ -8,5 +8,11 @@ urlpatterns = [
     path('ajax/get-body-details/', views.ajax_get_body_details, name='ajax_get_body_details'),
     path('celestial-by-type/', views.celestial_by_type_view, name='celestial_by_type'),
     path('ajax/celestial-by-type/', views.ajax_celestial_by_type, name='ajax_celestial_by_type'),
+    path('orbit-map/', views.orbit_map_view, name='orbit_map'),
+    path("planet-hierarchy/", views.hierarchy_view, name="planet_hierarchy"),
+    path("get-hierarchy/", views.hierarchy_data, name="get_hierarchy"),
+    path("planet-sunburst/", views.sunburst_hierarchy_view, name="planet_sunburst"),
+    path("get-sunburst-hierarchy/", views.sunburst_hierarchy_data, name="get_sunburst_hierarchy"),
+
 
 ]

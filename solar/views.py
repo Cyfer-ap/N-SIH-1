@@ -116,3 +116,99 @@ def ajax_celestial_by_type(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 
+
+def orbit_map_view(request):
+    return render(request, 'solar/orbit_map.html')
+
+
+API_URL = "https://api.le-systeme-solaire.net/rest/bodies/"
+
+
+def hierarchy_view(request):
+    return render(request, "solar/planet_hierarchy.html")
+
+
+def hierarchy_data(request):
+    try:
+        response = requests.get(API_URL, timeout=10)
+        response.raise_for_status()
+        all_bodies = response.json().get("bodies", [])
+    except requests.RequestException as e:
+        return JsonResponse({"error": f"Failed to fetch data from API: {e}"}, status=500)
+
+    # Separate planets and moons
+    planets = {
+        body["id"]: {
+            "name": body.get("englishName", body.get("id", "Unknown")),
+            "children": []
+        }
+        for body in all_bodies
+        if body.get("isPlanet")
+    }
+
+    # Map moons to their parent planets
+    for body in all_bodies:
+        around = body.get("aroundPlanet")
+        if around:
+            parent_id = around.get("planet")
+            moon_name = body.get("englishName", body.get("id", "Unnamed Moon"))
+            moon_node = {"name": moon_name}
+            if parent_id in planets:
+                planets[parent_id]["children"].append(moon_node)
+
+    # Final hierarchy: Sun as root
+    solar_system = {
+        "name": "Sun",
+        "children": list(planets.values())
+    }
+
+    return JsonResponse(solar_system)
+
+
+def sunburst_hierarchy_view(request):
+    return render(request, "solar/planet_sunburst.html")
+
+def sunburst_hierarchy_data(request):
+    try:
+        response = requests.get(API_URL, timeout=10)
+        response.raise_for_status()
+        all_bodies = response.json().get("bodies", [])
+    except requests.RequestException as e:
+        return JsonResponse({"error": f"Failed to fetch data from API: {e}"}, status=500)
+
+    labels = ["Sun"]
+    parents = [""]
+    hovertexts = ["The center of the solar system"]
+
+    # Add planets
+    planet_ids = []
+    for body in all_bodies:
+        if body.get("isPlanet"):
+            name = body.get("englishName", body["id"])
+            labels.append(name)
+            parents.append("Sun")
+            hovertexts.append(f"Planet: {name}")
+            planet_ids.append((body["id"], name))
+
+    # Add moons
+    id_to_name = dict(planet_ids)
+    for body in all_bodies:
+        around = body.get("aroundPlanet")
+        if around:
+            parent_id = around.get("planet")
+            parent_name = id_to_name.get(parent_id)
+            if parent_name:
+                moon_name = body.get("englishName", body["id"])
+                labels.append(moon_name)
+                parents.append(parent_name)
+                hovertexts.append(f"Moon of {parent_name}: {moon_name}")
+
+    data = {
+        "labels": labels,
+        "parents": parents,
+        "hovertexts": hovertexts,
+    }
+
+    return JsonResponse(data)
+
+

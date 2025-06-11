@@ -1,0 +1,47 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Planetary Hierarchy Viewer{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'solar/css/planet_hierarchy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🪐 Planetary System Hierarchy</h1>
+    <p class="note">Click on a planet to expand its moons. Use the controls to zoom, pan, and reset view.</p>
+
+    <div id="zoom-controls" class="zoom-btns" style="display:none">
+        <button id="zoom-in">➕ Zoom In</button>
+        <button id="zoom-out">➖ Zoom Out</button>
+        <button id="reset">♻ Reset View</button>
+    </div>
+
+    <div id="loading-indicator" class="loading">Loading planetary data...</div>
+    <div id="hierarchy-tree"></div>
+</div>
+    <button id="toggle-table" class="toggle-btn">📋 Show Tabular Data</button>
+
+<div id="data-table" class="hidden">
+    <h3>🧾 Planetary and Moon Data</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Parent</th>
+            </tr>
+        </thead>
+        <tbody id="table-body">
+            <!-- Dynamically filled -->
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="{% static 'solar/js/planet_hierarchy.js' %}"></script>
+{% endblock %}

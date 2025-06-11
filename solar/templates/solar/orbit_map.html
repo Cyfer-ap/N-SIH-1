@@ -1,0 +1,37 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Interactive Orbit Map{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'solar/css/orbit_map.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🌍 2D Orbit Map Viewer</h1>
+
+    <div class="controls">
+        <label for="body-type-select">Celestial Type:</label>
+        <select id="body-type-select">
+            <option value="planet" selected>Planets</option>
+            <option value="moon">Moons</option>
+            <option value="comet">Comets</option>
+            <option value="all">All Bodies</option>
+        </select>
+
+        <button id="zoom-inner">🔍 Inner System</button>
+        <button id="zoom-outer">🪐 Outer System</button>
+        <button id="zoom-full">🌌 Full System</button>
+
+        <button id="toggle-animation">▶️ Animate Orbits</button>
+    </div>
+
+    <div id="orbit-map"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script src="{% static 'solar/js/orbit_map.js' %}"></script>
+{% endblock %}
