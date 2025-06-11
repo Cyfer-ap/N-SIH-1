@@ -98,3 +98,21 @@ def ajax_get_body_details(request):
         return JsonResponse({'error': f'Request failed: {str(e)}'}, status=500)
 
 
+def celestial_by_type_view(request):
+    return render(request, 'solar/celestial_by_type.html')
+
+def ajax_celestial_by_type(request):
+    body_type = request.GET.get('type', '')
+    if not body_type:
+        return JsonResponse({'error': 'No body type specified'}, status=400)
+
+    api_url = f"https://api.le-systeme-solaire.net/rest/bodies?filter[]=bodyType,eq,{body_type}"
+    try:
+        res = requests.get(api_url)
+        res.raise_for_status()
+        data = res.json()
+        return JsonResponse({'bodies': data.get('bodies', [])})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+

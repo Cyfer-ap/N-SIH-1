@@ -1,0 +1,143 @@
+{% extends 'nasa_app/base.html' %}
+{% load static %}
+
+{% block title %}Celestial Body List Explorer{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'solar/css/celestial_by_type.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🪐 Explore Celestial Bodies by Type</h1>
+
+    <label for="type-select">Select Body Type:</label>
+    <select id="type-select">
+        <option value="">-- Choose a Type --</option>
+        <option value="Planet">Planet</option>
+        <option value="Moon">Moon</option>
+        <option value="Dwarf Planet">Dwarf Planet</option>
+        <option value="Asteroid">Asteroid</option>
+        <option value="Comet">Comet</option>
+    </select>
+
+    <div class="filters">
+
+        <div class="filter-group">
+            <label>Gravity:</label>
+            <select id="gravity-filter">
+                <option value="">All</option>
+                <option value="lt1">Less than 1</option>
+                <option value="1to5">1 – 5</option>
+                <option value="5to15">5 – 15</option>
+                <option value="gt15">Greater than 15</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Mass:</label>
+            <select id="mass-filter">
+                <option value="">All</option>
+                <option value="lt22">Less than 10^22</option>
+                <option value="22to24">10^22 – 10^24</option>
+                <option value="24to26">10^24 – 10^26</option>
+                <option value="gt26">Greater than 10^26</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Radius:</label>
+            <select id="radius-filter">
+                <option value="">All</option>
+                <option value="lt1000">Less than 1000</option>
+                <option value="1000to5000">1000 – 5000</option>
+                <option value="gt5000">Greater than 5000</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Density:</label>
+            <select id="density-filter">
+                <option value="">All</option>
+                <option value="lt1">Less than 1</option>
+                <option value="1to3">1 – 3</option>
+                <option value="3to6">3 – 6</option>
+                <option value="gt6">Greater than 6</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Escape Velocity:</label>
+            <select id="escape-filter">
+                <option value="">All</option>
+                <option value="lt3000">Less than 3000</option>
+                <option value="3000to7000">3000 – 7000</option>
+                <option value="gt7000">Greater than 7000</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Orbit (Semi-Major Axis):</label>
+            <select id="orbit-filter">
+                <option value="">All</option>
+                <option value="lt100k">Less than 100,000 km</option>
+                <option value="100kto1m">100,000 – 1,000,000 km</option>
+                <option value="gt1m">Greater than 1,000,000 km</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Discovery Year:</label>
+            <select id="discovery-filter">
+                <option value="">All</option>
+                <option value="lt1900">Before 1900</option>
+                <option value="1900to1950">1900 – 1950</option>
+                <option value="1950to2000">1950 – 2000</option>
+                <option value="gt2000">After 2000</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Sort By:</label>
+            <select id="sort-by">
+                <option value="">None</option>
+
+                <option value="mass-desc">Mass (Descending)</option>
+                <option value="mass-asc">Mass (Ascending)</option>
+
+                <option value="gravity-desc">Gravity (Descending)</option>
+                <option value="gravity-asc">Gravity (Ascending)</option>
+
+                <option value="radius-desc">Radius (Descending)</option>
+                <option value="radius-asc">Radius (Ascending)</option>
+
+                <option value="density-desc">Density (Descending)</option>
+                <option value="density-asc">Density (Ascending)</option>
+
+                <option value="escape-desc">Escape Velocity (Descending)</option>
+                <option value="escape-asc">Escape Velocity (Ascending)</option>
+
+                <option value="orbit-desc">Orbit (Semi-Major Axis) (Descending)</option>
+                <option value="orbit-asc">Orbit (Semi-Major Axis) (Ascending)</option>
+
+                <option value="discovery-desc">Discovery Year (Newest First)</option>
+                <option value="discovery-asc">Discovery Year (Oldest First)</option>
+            </select>
+
+        </div>
+
+        <div class="filter-group full-width">
+            <button id="apply-filters">Apply Filters</button>
+            <button id="reset-filters">Reset Filters</button>
+            <button id="download-csv">Download CSV</button>
+        </div>
+
+    </div>
+
+    <div id="results"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'solar/js/celestial_by_type.js' %}"></script>
+{% endblock %}
